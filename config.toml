@@ -15,7 +15,7 @@ hasCJKLanguage = true
 
 # 内容输出格式
 [outputs]
-  home = ["HTML", "RSS", "Atom"]
+  home = ["HTML", "RSS"]
   page = ["HTML"]
   section = ["HTML"]
   taxonomy = ["HTML"]
