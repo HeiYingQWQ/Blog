@@ -1,4 +1,4 @@
-module github.com/YOUR_USERNAME/blog
+module github.com/HeiYingQWQ/blog
 
 go 1.22
 
