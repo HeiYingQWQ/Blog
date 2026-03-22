@@ -1,0 +1,19 @@
+{{- /* 自定义 partial: 页脚 */ -}}
+<footer class="site-footer">
+  <div class="footer-container">
+    <p>&copy; {{ now.Year }} {{ .Site.Params.author | default "Blog Author" }}</p>
+    <p>
+      Powered by <a href="https://gohugo.io">Hugo</a> |
+      Theme <a href="https://github.com/adityatelange/hugo-PaperMod">PaperMod</a>
+    </p>
+    {{ if .Site.Params.socialIcons }}
+    <div class="social-links">
+      {{ range .Site.Params.socialIcons }}
+      <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">
+        {{- replace .name " " "" | title -}}
+      </a>
+      {{ end }}
+    </div>
+    {{ end }}
+  </div>
+</footer>

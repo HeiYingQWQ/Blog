@@ -1,0 +1,28 @@
+---
+title: "关于"
+date: 2025-03-22T00:00:00+08:00
+draft: false
+---
+
+欢迎访问我的博客！
+
+这是一个基于 **Hugo** 和 **GitHub Pages** 构建的全自动博客系统。
+
+### 关于这个博客
+
+- 使用 Hugo 生成的静态站点
+- 通过 GitHub Actions 自动化部署
+- 支持 RSS/Atom 订阅
+- 主题: PaperMod
+
+### 技术栈
+
+- **静态生成器**: Hugo (extended)
+- **托管**: GitHub Pages
+- **CI/CD**: GitHub Actions
+- **主题**: [PaperMod](https://github.com/adityatelange/hugo-PaperMod)
+
+### 联系方式
+
+- GitHub: [YOUR_USERNAME](https://github.com/YOUR_USERNAME)
+- Email: your-email@example.com

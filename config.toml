@@ -1,0 +1,97 @@
+# Hugo 配置文件
+baseURL = "https://HeiYingQWQ.github.io/"
+# 如果是自定义域名, 取消下面注释并替换为你的域名
+# baseURL = "https://your-custom-domain.com/"
+
+title = "全自动博客"
+author = "Blog Author"
+copyright = "© 2025 Blog Author"
+
+theme = "papermod"  # 使用 PaperMod 主题 (简洁现代化)
+
+# 语言设置
+DefaultContentLanguage = "zh-cn"
+hasCJKLanguage = true
+
+# 内容输出格式
+[outputs]
+  home = ["HTML", "RSS", "Atom"]
+  page = ["HTML"]
+  section = ["HTML"]
+  taxonomy = ["HTML"]
+  taxonomyTerm = ["HTML"]
+
+# RSS/Atom 配置
+[services.rss]
+  limit = 20
+
+[services.googleAnalytics]
+  ID = ""  # 可选: 填入 GA tracking ID
+
+# Permalinks 结构
+[permalinks]
+  posts = "/posts/:year/:month/:day/:slug/"
+  pages = "/:slug/"
+
+# 菜单配置
+[[menu.main]]
+  identifier = "home"
+  name = "首页"
+  url = "/"
+  weight = 1
+
+[[menu.main]]
+  identifier = "posts"
+  name = "文章"
+  url = "/posts/"
+  weight = 2
+
+[[menu.main]]
+  identifier = "about"
+  name = "关于"
+  url = "/about/"
+  weight = 3
+
+# PaperMod 主题特有配置
+[params]
+  defaultTheme = "auto"  # auto, dark, light
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+  comments = false  # 如需评论系统可开启
+
+  [[params.profileMode]]
+    enabled = true
+    title = "全自动博客"
+    subtitle = "一个基于 Hugo + GitHub Pages 的自动化博客系统"
+    imageUrl = "profile.jpg"  # 放在 static/ 目录下
+    imageTitle = "Profile"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/YOUR_USERNAME"
+
+  [[params.socialIcons]]
+    name = "twitter"
+    url = "https://twitter.com/YOUR_TWITTER"
+
+# 启用 emoji 支持
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true  # 允许 HTML 标签
+    [markup.goldmark.extensions]
+      typographer = true
+  [markup.highlight]
+    style = "monokai"
+    lineNos = true
+
+# 是否生成 sitemap
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5

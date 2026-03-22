@@ -1,0 +1,56 @@
+name: Deploy Hugo site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 当 main 分支有推送时触发
+  pull_request:
+    branches:
+      - main
+
+# 设置权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 仅允许同时运行一个部署
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # 构建和部署作业
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出代码
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # 如果主题是 git submodule
+          fetch-depth: 0    # 获取完整历史用于 Hugo 的 lastmod
+
+      # 2. 设置 Hugo
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true  # 使用 extended 版本支持 SCSS
+
+      # 3. 构建 Hugo 站点
+      - name: Build
+        run: |
+          hugo --gc --minify
+
+      # 4. 部署到 GitHub Pages
+      - name: Deploy
+        id: deployment
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          cname: ''  # 如果使用自定义域名, 在此填写, 例如: example.com
