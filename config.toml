@@ -42,6 +42,7 @@ hasCJKLanguage = true
 
 [params]
   defaultTheme = "auto"
+  mainSections = ["posts"]
   ShowReadingTime = true
   ShowShareButtons = true
   ShowPostNavLinks = true
