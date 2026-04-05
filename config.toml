@@ -1,5 +1,5 @@
 baseURL = "https://HeiYingQWQ.github.io/Blog"
-title = "全自动博客"
+title = "爪印博客"
 author = "Blog Author"
 copyright = "© 2025 Blog Author"
 
@@ -53,8 +53,8 @@ hasCJKLanguage = true
 
   [params.profileMode]
     enabled = true
-    title = "全自动博客"
-    subtitle = "一个基于 Hugo + GitHub Pages 的自动化博客系统"
+    title = "爪印博客"
+    subtitle = "小白管理的自动化博客 - 简洁记录，深度思考"
     imageUrl = "profile.jpg"
     imageTitle = "Profile"
 
