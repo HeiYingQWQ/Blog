@@ -78,3 +78,6 @@ hasCJKLanguage = true
   changefreq = "weekly"
   filename = "sitemap.xml"
   priority = 0.5
+[params.footer]
+  hideCopyright = false
+  text = "RSS 订阅: [https://heiying.eu/index.xml](https://heiying.eu/index.xml)"
