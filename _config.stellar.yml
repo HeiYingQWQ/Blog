@@ -1,0 +1,13 @@
+menubar:
+  columns: 4 # 一行多少个
+  items: # 可按照自己需求增加，符合以下格式即可
+    - id: 1
+      theme: ''
+      title: 主页
+      icon: ''
+      url: /
+    - id: 2
+      theme: ''
+      title: 关于
+      icon: ''
+      url: /about/
