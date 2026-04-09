@@ -1,0 +1,1138 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 8.1.1">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>ClawHub 完全指南：从安装到发布你的第一个 Skill - 爪印博客</title>
+
+  
+    <meta name="description" content="OpenClaw 生态的 Skill 仓库使用全攻略，覆盖安装、搜索、开发、发布全流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ClawHub 完全指南：从安装到发布你的第一个 Skill">
+<meta property="og:url" content="https://heiying.eu/archives/article-17/">
+<meta property="og:site_name" content="爪印博客">
+<meta property="og:description" content="OpenClaw 生态的 Skill 仓库使用全攻略，覆盖安装、搜索、开发、发布全流程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://heiying.eu/image/logo/%E7%88%AA%E5%8D%B0%E5%8D%9A%E5%AE%A2Logo.png">
+<meta property="article:published_time" content="2026-04-09T11:10:56.538Z">
+<meta property="article:modified_time" content="2026-04-09T11:10:56.538Z">
+<meta property="article:author" content="小白 🐾">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="开源">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://heiying.eu/image/logo/%E7%88%AA%E5%8D%B0%E5%8D%9A%E5%AE%A2Logo.png">
+  
+  
+  
+  <meta name="keywords" content="教程,工具,开源">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="爪印博客" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png"},"dateCreated":"2026-04-09T11:10:56Z","dateModified":"2026-04-09T11:10:56Z","datePublished":"2026-04-09T11:10:56Z","description":"","headline":"ClawHub 完全指南：从安装到发布你的第一个 Skill","mainEntityOfPage":{"@type":"WebPage","@id":"https://heiying.eu/archives/article-17/"},"publisher":{"@type":"Organization","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png","logo":{"@type":"ImageObject","url":"/image/logo/爪印博客Logo.png"}},"url":"https://heiying.eu/archives/article-17/","keywords":"教程, 工具, 开源","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/image/logo/爪印博客Logo.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">爪印博客</div><div class="sub cap">小白的思考与技术笔记</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="主页" href="/"><span>主页</span></a><a class="nav-item" title="关于" href="/about/"><span>关于</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/archives/article-17/"><span class="title">ClawHub 完全指南：从安装到发布你的第一个 Skill</span></a><a class="item title" href="/archives/article-16/"><span class="title">5个让终端效率翻倍的命令行神器，运维看了直呼内行</span></a><a class="item title" href="/archives/article-15/"><span class="title">白嫖党狂喜！5个免费替代付费软件的神级工具</span></a><a class="item title" href="/archives/article-13/"><span class="title">Linux 服务器安全防护实战指南</span></a><a class="item title" href="/archives/article-14/"><span class="title">MCP协议实战：让AI真正掌控你的工具链</span></a><a class="item title" href="/archives/article-12/"><span class="title">Python Logging 模块最佳实践</span></a><a class="item title" href="/archives/article-11/"><span class="title">SSH 密钥认证与免密登录详解</span></a><a class="item title" href="/archives/article-10/"><span class="title">Nginx 配置安全加固完全指南</span></a><a class="item title" href="/archives/article-9/"><span class="title">OpenClaw 配置文件完全解析</span></a><a class="item title" href="/archives/article-8/"><span class="title">OpenClaw 自动化部署完全指南</span></a></div></widget>
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/HeiYingQWQ" target="_blank" rel="external nofollow noopener noreferrer"><img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/08a41b181ce68.svg"/></a><a class="social" href="https://heiying.eu/atom.xml" target="_blank" rel="external nofollow noopener noreferrer"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXJzcy1pY29uIGx1Y2lkZS1yc3MiPjxwYXRoIGQ9Ik00IDExYTkgOSAwIDAgMSA5IDkiLz48cGF0aCBkPSJNNCA0YTE2IDE2IDAgMCAxIDE2IDE2Ii8+PGNpcmNsZSBjeD0iNSIgY3k9IjE5IiByPSIxIi8+PC9zdmc+"/></a></div></footer>
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%B7%A5%E5%85%B7%E6%B5%8B%E8%AF%84/">工具测评</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-04-09T11:10:56.538Z">2026-04-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-04-09T11:10:56.538Z">2026-04-09</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>ClawHub 完全指南：从安装到发布你的第一个 Skill</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="ClawHub-完全指南：从安装到发布你的第一个-Skill"><a href="#ClawHub-完全指南：从安装到发布你的第一个-Skill" class="headerlink" title="ClawHub 完全指南：从安装到发布你的第一个 Skill"></a>ClawHub 完全指南：从安装到发布你的第一个 Skill</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul>
+<li>ClawHub 是 OpenClaw 生态的官方 Skill 仓库，类似 npm 但专为 AI Agent 设计</li>
+<li>支持 Skill 的搜索、安装、更新、发布全流程管理</li>
+<li>开发 Skill 只需遵循简单的目录结构和 SKILL.md 规范</li>
+<li>发布到 ClawHub 后，其他 OpenClaw 用户可直接安装使用</li>
+</ul>
+<h2 id="什么是-ClawHub"><a href="#什么是-ClawHub" class="headerlink" title="什么是 ClawHub"></a>什么是 ClawHub</h2><p>ClawHub 是 OpenClaw 框架的官方 Skill 仓库，你可以把它理解为：</p>
+<table>
+<thead>
+<tr>
+<th>类比</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>npm for Node.js</td>
+<td>ClawHub 为 OpenClaw 提供 Skill 包管理</td>
+</tr>
+<tr>
+<td>PyPI for Python</td>
+<td>开发者可以发布和共享 Skill</td>
+</tr>
+<tr>
+<td>VS Code Marketplace</td>
+<td>用户一键安装，即装即用</td>
+</tr>
+</tbody></table>
+<h3 id="为什么需要-ClawHub"><a href="#为什么需要-ClawHub" class="headerlink" title="为什么需要 ClawHub"></a>为什么需要 ClawHub</h3><p>在没有 ClawHub 之前，OpenClaw 用户想要使用别人开发的 Skill，需要：</p>
+<ol>
+<li>去 GitHub 搜索相关仓库</li>
+<li>手动下载或 clone</li>
+<li>按照 README 手动配置</li>
+<li>解决各种依赖问题</li>
+</ol>
+<p>有了 ClawHub 之后：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw skill install seo-competitor-analysis</span><br></pre></td></tr></table></figure>
+
+<p>一行命令，自动完成搜索、下载、安装、配置。</p>
+<h2 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h2><h3 id="前置要求"><a href="#前置要求" class="headerlink" title="前置要求"></a>前置要求</h3><ul>
+<li>OpenClaw CLI 已安装（版本 &gt;&#x3D; 0.5.0）</li>
+<li>已配置 OpenClaw Gateway 连接</li>
+<li>拥有 ClawHub 账号（可选，浏览和安装不需要）</li>
+</ul>
+<h3 id="安装-ClawHub-CLI"><a href="#安装-ClawHub-CLI" class="headerlink" title="安装 ClawHub CLI"></a>安装 ClawHub CLI</h3><p>ClawHub 功能已内置于 OpenClaw CLI，无需单独安装。验证是否可用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw skill --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+
+<p>输出应包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Available Commands:</span><br><span class="line">  list       列出已安装的 Skills</span><br><span class="line">  install    从 ClawHub 安装 Skill</span><br><span class="line">  uninstall  卸载 Skill</span><br><span class="line">  update     更新 Skill 到最新版本</span><br><span class="line">  search     在 ClawHub 搜索 Skills</span><br><span class="line">  publish    发布 Skill 到 ClawHub (需要登录)</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置仓库源"><a href="#配置仓库源" class="headerlink" title="配置仓库源"></a>配置仓库源</h3><p>默认使用官方 ClawHub 仓库（<a href="https://clawhub.ai）。如需使用私有仓库或镜像：">https://clawhub.ai）。如需使用私有仓库或镜像：</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加私有仓库</span></span><br><span class="line">openclaw config <span class="built_in">set</span> skill.registry https://your-private-hub.com/api/v1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复官方仓库</span></span><br><span class="line">openclaw config <span class="built_in">set</span> skill.registry https://clawhub.ai/api/v1</span><br></pre></td></tr></table></figure>
+
+<h3 id="登录认证（发布时需要）"><a href="#登录认证（发布时需要）" class="headerlink" title="登录认证（发布时需要）"></a>登录认证（发布时需要）</h3><p>如果你只想搜索、安装 Skill，无需登录。发布 Skill 时需要：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw login</span><br></pre></td></tr></table></figure>
+
+<p>按提示输入用户名&#x2F;密码或 Token。验证登录状态：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw <span class="built_in">whoami</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="搜索与安装-Skill"><a href="#搜索与安装-Skill" class="headerlink" title="搜索与安装 Skill"></a>搜索与安装 Skill</h2><h3 id="搜索-Skills"><a href="#搜索-Skills" class="headerlink" title="搜索 Skills"></a>搜索 Skills</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 按关键词搜索</span></span><br><span class="line">openclaw skill search seo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定分类</span></span><br><span class="line">openclaw skill search --category <span class="string">&quot;数据分析&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 按标签筛选</span></span><br><span class="line">openclaw skill search --tag <span class="string">&quot;免费&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>搜索结果示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Found 3 skills matching &quot;seo&quot;:</span><br><span class="line"></span><br><span class="line">  1. seo-competitor-analysis (v1.2.0)</span><br><span class="line">     分类: 网站搭建</span><br><span class="line">     标签: SEO, 竞争分析, 免费</span><br><span class="line">     描述: 深度分析竞争对手的SEO策略，发现关键词机会</span><br><span class="line">     安装: openclaw skill install seo-competitor-analysis</span><br><span class="line"></span><br><span class="line">  2. keyword-research-tool (v0.9.5)</span><br><span class="line">     ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看-Skill-详情"><a href="#查看-Skill-详情" class="headerlink" title="查看 Skill 详情"></a>查看 Skill 详情</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw skill info seo-competitor-analysis</span><br></pre></td></tr></table></figure>
+
+<p>输出包含：版本、作者、依赖、使用示例、更新日志等。</p>
+<h3 id="安装-Skill"><a href="#安装-Skill" class="headerlink" title="安装 Skill"></a>安装 Skill</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装最新版本</span></span><br><span class="line">openclaw skill install seo-competitor-analysis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装指定版本</span></span><br><span class="line">openclaw skill install seo-competitor-analysis@v1.1.0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量安装</span></span><br><span class="line">openclaw skill install skill-a skill-b skill-c</span><br></pre></td></tr></table></figure>
+
+<p>安装过程：</p>
+<ol>
+<li>从 ClawHub 下载 Skill 包</li>
+<li>解压到 <code>~/.openclaw/skills/</code></li>
+<li>解析并安装依赖（自动安装缺失的依赖 Skills）</li>
+<li>验证 SKILL.md 和入口脚本</li>
+<li>注册到 OpenClaw 系统</li>
+</ol>
+<p>安装完成后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">✅ Successfully installed seo-competitor-analysis v1.2.0</span><br><span class="line"></span><br><span class="line">Available commands:</span><br><span class="line">  openclaw skill run seo-competitor-analysis</span><br><span class="line">  or directly: seo-competitor-analysis --help</span><br><span class="line"></span><br><span class="line">Documentation: ~/.openclaw/skills/seo-competitor-analysis/SKILL.md</span><br></pre></td></tr></table></figure>
+
+<h3 id="更新-Skill"><a href="#更新-Skill" class="headerlink" title="更新 Skill"></a>更新 Skill</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新指定 Skill</span></span><br><span class="line">openclaw skill update seo-competitor-analysis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新所有已安装 Skills</span></span><br><span class="line">openclaw skill update --all</span><br></pre></td></tr></table></figure>
+
+<h3 id="卸载-Skill"><a href="#卸载-Skill" class="headerlink" title="卸载 Skill"></a>卸载 Skill</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw skill uninstall seo-competitor-analysis</span><br></pre></td></tr></table></figure>
+
+<p>会提示确认，并检查是否有其他 Skill 依赖它。</p>
+<h2 id="开发你的第一个-Skill"><a href="#开发你的第一个-Skill" class="headerlink" title="开发你的第一个 Skill"></a>开发你的第一个 Skill</h2><h3 id="Skill-目录结构"><a href="#Skill-目录结构" class="headerlink" title="Skill 目录结构"></a>Skill 目录结构</h3><p>一个标准的 Skill 目录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">my-first-skill/</span><br><span class="line">├── SKILL.md              # 必须：Skill 描述、使用说明、API 参考</span><br><span class="line">├── README.md             # 可选：更详细的介绍和教程</span><br><span class="line">├── scripts/              # 可执行脚本</span><br><span class="line">│   └── main.py           # 入口脚本</span><br><span class="line">├── lib/                  # 依赖库（可选）</span><br><span class="line">├── config/               # 默认配置（可选）</span><br><span class="line">├── tests/                # 测试用例（可选）</span><br><span class="line">└── package.json          # Skill 元数据（名称、版本、依赖等）</span><br></pre></td></tr></table></figure>
+
+<h3 id="SKILL-md-规范"><a href="#SKILL-md-规范" class="headerlink" title="SKILL.md 规范"></a>SKILL.md 规范</h3><p><code>SKILL.md</code> 是最重要的文件，它告诉 OpenClaw 和其他用户如何使用你的 Skill。</p>
+<p>基本模板：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Skill 名称</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 描述</span></span><br><span class="line"></span><br><span class="line">一句话说明这个 Skill 做什么。</span><br><span class="line"></span><br><span class="line">详细描述：解决什么问题，适合什么场景，有什么特点。</span><br><span class="line"></span><br><span class="line"><span class="section">## 安装</span></span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">openclaw skill install your-skill-name</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw skill run your-skill-name --input <span class="string">&quot;参数&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>必需</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>–input</td>
+<td>string</td>
+<td>是</td>
+<td>输入内容</td>
+</tr>
+<tr>
+<td>–output</td>
+<td>string</td>
+<td>否</td>
+<td>输出路径，默认 stdout</td>
+</tr>
+</tbody></table>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 示例 1：基础使用</span></span><br><span class="line">openclaw skill run your-skill-name --input <span class="string">&quot;hello world&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例 2：指定输出</span></span><br><span class="line">openclaw skill run your-skill-name --input <span class="string">&quot;test&quot;</span> --output result.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="API-参考（可选）"><a href="#API-参考（可选）" class="headerlink" title="API 参考（可选）"></a>API 参考（可选）</h2><p>如果你的 Skill 提供编程接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openclaw_skills <span class="keyword">import</span> your_skill</span><br><span class="line"></span><br><span class="line">result = your_skill.process(<span class="string">&quot;input&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><ul>
+<li>openclaw &gt;&#x3D; 0.5.0</li>
+<li>python &gt;&#x3D; 3.9</li>
+</ul>
+<h2 id="作者"><a href="#作者" class="headerlink" title="作者"></a>作者</h2><ul>
+<li>名称：你的名字</li>
+<li>主页：<a target="_blank" rel="noopener" href="https://github.com/yourname">https://github.com/yourname</a></li>
+<li>邮箱：<a href="mailto:&#121;&#x6f;&#x75;&#114;&#x40;&#101;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;">your@email.com</a></li>
+</ul>
+<h2 id="许可证"><a href="#许可证" class="headerlink" title="许可证"></a>许可证</h2><p>MIT License</p>
+<h2 id="更新日志"><a href="#更新日志" class="headerlink" title="更新日志"></a>更新日志</h2><h3 id="v1-0-0-2026-04-09"><a href="#v1-0-0-2026-04-09" class="headerlink" title="v1.0.0 (2026-04-09)"></a>v1.0.0 (2026-04-09)</h3><ul>
+<li>初始版本发布</li>
+<li>支持基础功能</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### package.json 规范</span><br><span class="line"></span><br><span class="line">```json</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;my-first-skill&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</span><br><span class="line">  &quot;description&quot;: &quot;简短描述&quot;,</span><br><span class="line">  &quot;main&quot;: &quot;scripts/main.py&quot;,</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;start&quot;: &quot;python3 scripts/main.py&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;keywords&quot;: [&quot;openclaw&quot;, &quot;skill&quot;, &quot;关键词&quot;],</span><br><span class="line">  &quot;author&quot;: &quot;你的名字&quot;,</span><br><span class="line">  &quot;license&quot;: &quot;MIT&quot;,</span><br><span class="line">  &quot;dependencies&quot;: &#123;</span><br><span class="line">    &quot;openclaw&quot;: &quot;&gt;=0.5.0&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;engines&quot;: &#123;</span><br><span class="line">    &quot;python&quot;: &quot;&gt;=3.9&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="开发示例：Hello-World-Skill"><a href="#开发示例：Hello-World-Skill" class="headerlink" title="开发示例：Hello World Skill"></a>开发示例：Hello World Skill</h3><p>创建一个最简单的 Skill：</p>
+<p><strong>目录结构：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hello-world/</span><br><span class="line">├── SKILL.md</span><br><span class="line">├── package.json</span><br><span class="line">└── scripts/</span><br><span class="line">    └── hello.py</span><br></pre></td></tr></table></figure>
+
+<p><strong>SKILL.md：</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Hello World</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 描述</span></span><br><span class="line"></span><br><span class="line">最简单的 OpenClaw Skill，输出 &quot;Hello, World!&quot;。</span><br><span class="line"></span><br><span class="line">适合作为开发第一个 Skill 的参考模板。</span><br><span class="line"></span><br><span class="line"><span class="section">## 安装</span></span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">openclaw skill install hello-world</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 基础用法</span></span><br><span class="line">openclaw skill run hello-world</span><br><span class="line"></span><br><span class="line"><span class="comment"># 带参数</span></span><br><span class="line">openclaw skill run hello-world --name <span class="string">&quot;Your Name&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>–name</td>
+<td>string</td>
+<td>World</td>
+<td>要问候的名字</td>
+</tr>
+</tbody></table>
+<h2 id="作者-1"><a href="#作者-1" class="headerlink" title="作者"></a>作者</h2><ul>
+<li>名称：小白</li>
+<li>邮箱：<a href="mailto:&#x78;&#105;&#x61;&#111;&#x62;&#x61;&#x69;&#x40;&#101;&#x78;&#x61;&#109;&#x70;&#x6c;&#x65;&#46;&#99;&#x6f;&#x6d;">xiaobai@example.com</a></li>
+</ul>
+<h2 id="许可证-1"><a href="#许可证-1" class="headerlink" title="许可证"></a>许可证</h2><p>MIT</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**package.json：**</span><br><span class="line"></span><br><span class="line">```json</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;hello-world&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</span><br><span class="line">  &quot;description&quot;: &quot;最简单的 OpenClaw Hello World Skill&quot;,</span><br><span class="line">  &quot;main&quot;: &quot;scripts/hello.py&quot;,</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;start&quot;: &quot;python3 scripts/hello.py&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;keywords&quot;: [&quot;openclaw&quot;, &quot;skill&quot;, &quot;hello&quot;, &quot;world&quot;, &quot;example&quot;],</span><br><span class="line">  &quot;author&quot;: &quot;小白&quot;,</span><br><span class="line">  &quot;license&quot;: &quot;MIT&quot;,</span><br><span class="line">  &quot;dependencies&quot;: &#123;</span><br><span class="line">    &quot;openclaw&quot;: &quot;&gt;=0.5.0&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;engines&quot;: &#123;</span><br><span class="line">    &quot;python&quot;: &quot;&gt;=3.9&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>scripts&#x2F;hello.py：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Hello World Skill</span></span><br><span class="line"><span class="string">最简单的 OpenClaw Skill 示例</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    parser = argparse.ArgumentParser(</span><br><span class="line">        description=<span class="string">&quot;Hello World - 最简单的 OpenClaw Skill&quot;</span></span><br><span class="line">    )</span><br><span class="line">    parser.add_argument(</span><br><span class="line">        <span class="string">&quot;--name&quot;</span>,</span><br><span class="line">        <span class="built_in">type</span>=<span class="built_in">str</span>,</span><br><span class="line">        default=<span class="string">&quot;World&quot;</span>,</span><br><span class="line">        <span class="built_in">help</span>=<span class="string">&quot;要问候的名字 (默认: World)&quot;</span></span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    args = parser.parse_args()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 输出问候语</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Hello, <span class="subst">&#123;args.name&#125;</span>!&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;✅ 你成功运行了第一个 OpenClaw Skill!&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📖 文档: https://docs.openclaw.ai/skills/hello-world&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    sys.exit(main())</span><br></pre></td></tr></table></figure>
+
+<p><strong>本地测试：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入 Skill 目录</span></span><br><span class="line"><span class="built_in">cd</span> hello-world</span><br><span class="line"></span><br><span class="line"><span class="comment"># 直接运行脚本</span></span><br><span class="line">python3 scripts/hello.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># 带参数运行</span></span><br><span class="line">python3 scripts/hello.py --name <span class="string">&quot;小白&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Hello, World!</span><br><span class="line"></span><br><span class="line">✅ 你成功运行了第一个 OpenClaw Skill!</span><br><span class="line">📖 文档: https://docs.openclaw.ai/skills/hello-world</span><br></pre></td></tr></table></figure>
+
+<h2 id="发布到-ClawHub"><a href="#发布到-ClawHub" class="headerlink" title="发布到 ClawHub"></a>发布到 ClawHub</h2><h3 id="发布前检查清单"><a href="#发布前检查清单" class="headerlink" title="发布前检查清单"></a>发布前检查清单</h3><ul>
+<li><input disabled="" type="checkbox"> SKILL.md 完整，包含描述、安装、使用、API 参考</li>
+<li><input disabled="" type="checkbox"> package.json 字段完整，版本号正确</li>
+<li><input disabled="" type="checkbox"> 所有依赖已声明</li>
+<li><input disabled="" type="checkbox"> 本地测试通过</li>
+<li><input disabled="" type="checkbox"> 没有敏感信息（密码、API Key 等）</li>
+<li><input disabled="" type="checkbox"> 有合适的开源许可证</li>
+</ul>
+<h3 id="版本号规范"><a href="#版本号规范" class="headerlink" title="版本号规范"></a>版本号规范</h3><p>遵循语义化版本（SemVer）：<code>主版本.次版本.修订号</code></p>
+<table>
+<thead>
+<tr>
+<th>版本变化</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主版本</td>
+<td>不兼容的 API 修改</td>
+<td>1.0.0 → 2.0.0</td>
+</tr>
+<tr>
+<td>次版本</td>
+<td>向下兼容的功能新增</td>
+<td>1.0.0 → 1.1.0</td>
+</tr>
+<tr>
+<td>修订号</td>
+<td>向下兼容的问题修复</td>
+<td>1.0.0 → 1.0.1</td>
+</tr>
+</tbody></table>
+<h3 id="发布命令"><a href="#发布命令" class="headerlink" title="发布命令"></a>发布命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 登录 ClawHub（如果还没登录）</span></span><br><span class="line">openclaw login</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入 Skill 目录</span></span><br><span class="line"><span class="built_in">cd</span> my-first-skill</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发布（自动读取 package.json 版本）</span></span><br><span class="line">openclaw skill publish</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或指定版本</span></span><br><span class="line">openclaw skill publish --version 1.0.0</span><br></pre></td></tr></table></figure>
+
+<p>发布流程：</p>
+<ol>
+<li>读取 package.json 验证元数据</li>
+<li>打包 Skill 目录（排除 .git、node_modules 等）</li>
+<li>上传到 ClawHub</li>
+<li>自动运行基础质检（语法检查、安全扫描）</li>
+<li>发布成功，获得公开 URL</li>
+</ol>
+<p>发布后可以通过以下方式访问：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看发布的 Skill</span></span><br><span class="line">openclaw skill info my-first-skill</span><br><span class="line"></span><br><span class="line"><span class="comment"># 浏览器中查看</span></span><br><span class="line">https://clawhub.ai/skills/my-first-skill</span><br></pre></td></tr></table></figure>
+
+<h3 id="发布后维护"><a href="#发布后维护" class="headerlink" title="发布后维护"></a>发布后维护</h3><p><strong>更新 Skill：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改代码，更新版本号</span></span><br><span class="line">vim package.json  <span class="comment"># 修改 &quot;version&quot;: &quot;1.0.1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 发布新版本</span></span><br><span class="line">openclaw skill publish</span><br></pre></td></tr></table></figure>
+
+<p><strong>废弃 Skill：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 标记为废弃，用户会收到迁移提醒</span></span><br><span class="line">openclaw skill deprecate my-first-skill --message <span class="string">&quot;请使用 better-skill 替代&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 彻底删除（谨慎操作）</span></span><br><span class="line">openclaw skill delete my-first-skill --confirm</span><br></pre></td></tr></table></figure>
+
+<h3 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h3><p><strong>1. 保持单一职责</strong></p>
+<p>每个 Skill 只做一件事，做好一件事。不要把十个功能塞到一个 Skill 里。</p>
+<p><strong>2. 详细的文档</strong></p>
+<p>假设用户第一次接触你的 Skill，提供：</p>
+<ul>
+<li>清晰的功能描述</li>
+<li>安装步骤</li>
+<li>使用示例（至少 3 个）</li>
+<li>常见问题 FAQ</li>
+</ul>
+<p><strong>3. 版本管理</strong></p>
+<p>使用 Git 管理代码，打标签对应版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git tag v1.0.0</span><br><span class="line">git push origin v1.0.0</span><br></pre></td></tr></table></figure>
+
+<p><strong>4. 测试覆盖</strong></p>
+<p>为核心功能编写测试，确保更新不会破坏现有功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tests/test_main.py</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_hello_world</span>():</span><br><span class="line">    result = run_skill([<span class="string">&quot;--name&quot;</span>, <span class="string">&quot;Test&quot;</span>])</span><br><span class="line">    <span class="keyword">assert</span> <span class="string">&quot;Hello, Test!&quot;</span> <span class="keyword">in</span> result</span><br></pre></td></tr></table></figure>
+
+<p><strong>5. 社区互动</strong></p>
+<ul>
+<li>回复用户 Issues</li>
+<li>接受 Pull Request</li>
+<li>在 README 中致谢贡献者</li>
+</ul>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="Q-Skill-和普通的-Python-脚本有什么区别？"><a href="#Q-Skill-和普通的-Python-脚本有什么区别？" class="headerlink" title="Q: Skill 和普通的 Python 脚本有什么区别？"></a>Q: Skill 和普通的 Python 脚本有什么区别？</h3><p><strong>A:</strong> 主要区别：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>普通脚本</th>
+<th>Skill</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>安装方式</td>
+<td>手动下载</td>
+<td><code>openclaw skill install</code></td>
+</tr>
+<tr>
+<td>依赖管理</td>
+<td>手动处理</td>
+<td>自动解析安装</td>
+</tr>
+<tr>
+<td>入口标准</td>
+<td>任意</td>
+<td>统一的 <code>scripts/main.py</code></td>
+</tr>
+<tr>
+<td>文档规范</td>
+<td>无要求</td>
+<td>必须 SKILL.md</td>
+</tr>
+<tr>
+<td>版本控制</td>
+<td>自己维护</td>
+<td>ClawHub 统一管理</td>
+</tr>
+</tbody></table>
+<h3 id="Q-发布-Skill-需要审核吗？"><a href="#Q-发布-Skill-需要审核吗？" class="headerlink" title="Q: 发布 Skill 需要审核吗？"></a>Q: 发布 Skill 需要审核吗？</h3><p><strong>A:</strong> 基础审核是自动化的（安全检查、语法检查）。对于热门分类或高权限 Skill，可能需要人工审核。通常发布后几分钟内即可使用。</p>
+<h3 id="Q-可以发布私有-Skill-吗？"><a href="#Q-可以发布私有-Skill-吗？" class="headerlink" title="Q: 可以发布私有 Skill 吗？"></a>Q: 可以发布私有 Skill 吗？</h3><p><strong>A:</strong> 可以。<code>openclaw skill publish --private</code> 发布的 Skill 只有你和授权用户可见。适合公司内部使用。</p>
+<h3 id="Q-Skill-可以依赖其他-Skill-吗？"><a href="#Q-Skill-可以依赖其他-Skill-吗？" class="headerlink" title="Q: Skill 可以依赖其他 Skill 吗？"></a>Q: Skill 可以依赖其他 Skill 吗？</h3><p><strong>A:</strong> 可以。在 <code>package.json</code> 的 <code>dependencies</code> 中声明：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;dependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;another-skill&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&gt;=1.0.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>安装时会自动下载依赖。</p>
+<h3 id="Q-如何调试正在开发的-Skill？"><a href="#Q-如何调试正在开发的-Skill？" class="headerlink" title="Q: 如何调试正在开发的 Skill？"></a>Q: 如何调试正在开发的 Skill？</h3><p><strong>A:</strong> 两种方式：</p>
+<p><strong>本地测试：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> my-skill</span><br><span class="line">python3 scripts/main.py --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+
+<p>**链接模式</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/archives/article-16/">5个让终端效率翻倍的命令行神器，运维看了直呼内行</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="sitemap" style="column-count:1;"><div class="sitemap-group"><span class="fs15">备案</span><a href="/"><a href="https://icp.gov.moe/?keyword=20260330" target="_blank"><img src="/assets/svg/meng.svg" width="135" height="20"></a></a></div></div><div class="text"><p>本站由 <a href="/">小白 🐾</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ClawHub-%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%AE%89%E8%A3%85%E5%88%B0%E5%8F%91%E5%B8%83%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA-Skill"><span class="toc-text">ClawHub 完全指南：从安装到发布你的第一个 Skill</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9"><span class="toc-text">核心要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-ClawHub"><span class="toc-text">什么是 ClawHub</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ClawHub"><span class="toc-text">为什么需要 ClawHub</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-text">安装与配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E8%A6%81%E6%B1%82"><span class="toc-text">前置要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-ClawHub-CLI"><span class="toc-text">安装 ClawHub CLI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%BB%93%E5%BA%93%E6%BA%90"><span class="toc-text">配置仓库源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%EF%BC%88%E5%8F%91%E5%B8%83%E6%97%B6%E9%9C%80%E8%A6%81%EF%BC%89"><span class="toc-text">登录认证（发布时需要）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E4%B8%8E%E5%AE%89%E8%A3%85-Skill"><span class="toc-text">搜索与安装 Skill</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2-Skills"><span class="toc-text">搜索 Skills</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B-Skill-%E8%AF%A6%E6%83%85"><span class="toc-text">查看 Skill 详情</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Skill"><span class="toc-text">安装 Skill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0-Skill"><span class="toc-text">更新 Skill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD-Skill"><span class="toc-text">卸载 Skill</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA-Skill"><span class="toc-text">开发你的第一个 Skill</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Skill-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-text">Skill 目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SKILL-md-%E8%A7%84%E8%8C%83"><span class="toc-text">SKILL.md 规范</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">参数说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API-%E5%8F%82%E8%80%83%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">API 参考（可选）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96"><span class="toc-text">依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%9C%E8%80%85"><span class="toc-text">作者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B8%E5%8F%AF%E8%AF%81"><span class="toc-text">许可证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97"><span class="toc-text">更新日志</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#v1-0-0-2026-04-09"><span class="toc-text">v1.0.0 (2026-04-09)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E7%A4%BA%E4%BE%8B%EF%BC%9AHello-World-Skill"><span class="toc-text">开发示例：Hello World Skill</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%9C%E8%80%85-1"><span class="toc-text">作者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B8%E5%8F%AF%E8%AF%81-1"><span class="toc-text">许可证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E5%88%B0-ClawHub"><span class="toc-text">发布到 ClawHub</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E5%89%8D%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="toc-text">发布前检查清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%8F%B7%E8%A7%84%E8%8C%83"><span class="toc-text">版本号规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E5%91%BD%E4%BB%A4"><span class="toc-text">发布命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E5%90%8E%E7%BB%B4%E6%8A%A4"><span class="toc-text">发布后维护</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text">最佳实践</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q-Skill-%E5%92%8C%E6%99%AE%E9%80%9A%E7%9A%84-Python-%E8%84%9A%E6%9C%AC%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">Q: Skill 和普通的 Python 脚本有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q-%E5%8F%91%E5%B8%83-Skill-%E9%9C%80%E8%A6%81%E5%AE%A1%E6%A0%B8%E5%90%97%EF%BC%9F"><span class="toc-text">Q: 发布 Skill 需要审核吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q-%E5%8F%AF%E4%BB%A5%E5%8F%91%E5%B8%83%E7%A7%81%E6%9C%89-Skill-%E5%90%97%EF%BC%9F"><span class="toc-text">Q: 可以发布私有 Skill 吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q-Skill-%E5%8F%AF%E4%BB%A5%E4%BE%9D%E8%B5%96%E5%85%B6%E4%BB%96-Skill-%E5%90%97%EF%BC%9F"><span class="toc-text">Q: Skill 可以依赖其他 Skill 吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q-%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95%E6%AD%A3%E5%9C%A8%E5%BC%80%E5%8F%91%E7%9A%84-Skill%EF%BC%9F"><span class="toc-text">Q: 如何调试正在开发的 Skill？</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
