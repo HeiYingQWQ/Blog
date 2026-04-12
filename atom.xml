@@ -18,8 +18,8 @@
     </author>
     <category term="网站搭建" scheme="https://heiying.eu/categories/%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/"/>
     <category term="工具" scheme="https://heiying.eu/tags/%E5%B7%A5%E5%85%B7/"/>
-    <category term="配置" scheme="https://heiying.eu/tags/%E9%85%8D%E7%BD%AE/"/>
     <category term="教程" scheme="https://heiying.eu/tags/%E6%95%99%E7%A8%8B/"/>
+    <category term="配置" scheme="https://heiying.eu/tags/%E9%85%8D%E7%BD%AE/"/>
     <content>
       <![CDATA[<h1 id="Hexo-高级技巧：自定义页面与-Shortcode-实战"><a href="#Hexo-高级技巧：自定义页面与-Shortcode-实战" class="headerlink" title="Hexo 高级技巧：自定义页面与 Shortcode 实战"></a>Hexo 高级技巧：自定义页面与 Shortcode 实战</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul><li>创建独立页面：关于我、友情链接、标签云的 Hexo generator 与模板写法</li><li>Shortcode 入门：编写自己的 note、tabs 组件，在 Markdown 中嵌入 HTML&#x2F;JS</li><li>自定义文章布局：使用 hexo-generator-index 控制首页显示、摘要截断与缩略图</li><li>数据文件运用：用 _data&#x2F;*.yml 管理导航链接、社交媒体信息，实现配置与内容分离</li><li>插件推荐与分析：hexo-abbrlink（永久链接优化）、hexo-sitemap（SEO 必备）、hexo-baidu-submit（百度推送）</li><li>自动化脚本：package.json 自定义脚本（构建清理、图片压缩、死链检查）</li></ul><!-- 正文由 LLM 填充 -->]]>
     </content>
@@ -36,8 +36,8 @@
     </author>
     <category term="网站搭建" scheme="https://heiying.eu/categories/%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/"/>
     <category term="工具" scheme="https://heiying.eu/tags/%E5%B7%A5%E5%85%B7/"/>
-    <category term="主题" scheme="https://heiying.eu/tags/%E4%B8%BB%E9%A2%98/"/>
     <category term="配置" scheme="https://heiying.eu/tags/%E9%85%8D%E7%BD%AE/"/>
+    <category term="主题" scheme="https://heiying.eu/tags/%E4%B8%BB%E9%A2%98/"/>
     <content>
       <![CDATA[<h1 id="Stellar-主题深度定制：修改布局与添加自定义区块"><a href="#Stellar-主题深度定制：修改布局与添加自定义区块" class="headerlink" title="Stellar 主题深度定制：修改布局与添加自定义区块"></a>Stellar 主题深度定制：修改布局与添加自定义区块</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul><li>主题结构解析：layout&#x2F;partial&#x2F; 文件作用、EJS 模板继承与区块（block）机制</li><li>侧边栏与页脚定制：新增自定义小组件（最新文章&#x2F;标签云&#x2F;友情链接）的步骤</li><li>文章页增强：在文章头部&#x2F;底部插入广告、版权声明、分享按钮的 EJS 修改技巧</li><li>移动端适配检查：用浏览器 DevTools 调参、Stellar 响应式断幅与自定义 CSS 覆盖</li><li>暗色模式实现：利用 CSS 变量与媒体查询，为 Stellar 添加深色主题切换</li><li>升级与维护：git pull 更新主题、保留自定义修改的 patch 管理与冲突解决</li></ul>]]>
     </content>
@@ -53,9 +53,27 @@
       <name>小白 🐾</name>
     </author>
     <category term="网站搭建" scheme="https://heiying.eu/categories/%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/"/>
-    <category term="主题" scheme="https://heiying.eu/tags/%E4%B8%BB%E9%A2%98/"/>
+    <category term="教程" scheme="https://heiying.eu/tags/%E6%95%99%E7%A8%8B/"/>
+    <category term="部署" scheme="https://heiying.eu/tags/%E9%83%A8%E7%BD%B2/"/>
+    <category term="优化" scheme="https://heiying.eu/tags/%E4%BC%98%E5%8C%96/"/>
+    <content>
+      <![CDATA[<h1 id="Hexo-博客-SEO-与性能优化实战"><a href="#Hexo-博客-SEO-与性能优化实战" class="headerlink" title="Hexo 博客 SEO 与性能优化实战"></a>Hexo 博客 SEO 与性能优化实战</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul><li>SEO 基础：meta 标签优化、sitemap 生成、robots.txt 配置与百度&#x2F;Google 站长平台提交</li><li>加载速度提升：图片压缩与 WebP 转换、CSS&#x2F;JS 合并与压缩、CDN 静态资源加速</li><li>缓存策略：浏览器缓存头设置、Hexo generate 增量生成与 –generate 参数优化</li><li>代码高亮优化：更换 highlight.js 主题、行号显示与语言标识的自定义</li><li>监控与分析：接入 Google Analytics 与百度统计、不遮挡页面的隐私友好型方案</li><li>自动化检查：用 hexo-abbrlink 避免中文链接、死链检测脚本、构建错误邮件通知</li></ul>]]>
+    </content>
+    <id>https://heiying.eu/archives/article-8/</id>
+    <link href="https://heiying.eu/archives/article-8/"/>
+    <published>2026-04-12T18:00:00.000Z</published>
+    <summary>博客搭建完成后，性能和曝光是关键。这篇提供可落地的优化清单，帮助读者提升访问速度与搜索引擎收录。</summary>
+    <title>Hexo 博客 SEO 与性能优化实战</title>
+    <updated>2026-04-12T18:00:45.375Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>小白 🐾</name>
+    </author>
+    <category term="网站搭建" scheme="https://heiying.eu/categories/%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/"/>
     <category term="建站" scheme="https://heiying.eu/tags/%E5%BB%BA%E7%AB%99/"/>
     <category term="配置" scheme="https://heiying.eu/tags/%E9%85%8D%E7%BD%AE/"/>
+    <category term="主题" scheme="https://heiying.eu/tags/%E4%B8%BB%E9%A2%98/"/>
     <content>
       <![CDATA[<h1 id="Stellar-主题安装与基础定制：让博客颜值起飞"><a href="#Stellar-主题安装与基础定制：让博客颜值起飞" class="headerlink" title="Stellar 主题安装与基础定制：让博客颜值起飞"></a>Stellar 主题安装与基础定制：让博客颜值起飞</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul><li>主题安装：npm 安装 hexo-theme-stellar、启用主题、目录覆盖最佳实践</li><li>配置文件详解：stellar&#x2F;_config.yml 中的菜单、社交链接、头像&#x2F;Favicon 设置</li><li>样式微调：修改主题色、字体、圆角与阴影的 Stylus 变量覆盖方法</li><li>组件选择：启用&#x2F;禁用文章目录、代码块主题、返回顶部按钮与阅读进度条</li><li>多语言支持：中文站配置、日期格式与本地化注意事项</li><li>性能优化：图片懒加载、CDN 引入、gzip 压缩与 Hexo 生成速度调优</li></ul>]]>
     </content>
