@@ -17,29 +17,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车 - 爪印博客</title>
+  <title>进制转换不用死记硬背：程序员的实用方法 - 爪印博客</title>
 
   
-    <meta name="description" content="深入解析 OpenClaw 核心架构，帮助用户理解原理">
+    <meta name="description" content="解决了程序员面试和日常工作中常见的进制转换问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车">
-<meta property="og:url" content="https://heiying.eu/archives/article-18/">
+<meta property="og:title" content="进制转换不用死记硬背：程序员的实用方法">
+<meta property="og:url" content="https://heiying.eu/archives/article-33/">
 <meta property="og:site_name" content="爪印博客">
-<meta property="og:description" content="深入解析 OpenClaw 核心架构，帮助用户理解原理">
+<meta property="og:description" content="解决了程序员面试和日常工作中常见的进制转换问题。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://heiying.eu/image/logo/%E7%88%AA%E5%8D%B0%E5%8D%9A%E5%AE%A2Logo.png">
-<meta property="article:published_time" content="2026-04-11T20:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-15T13:21:16.799Z">
+<meta property="article:published_time" content="2026-04-24T07:02:00.000Z">
+<meta property="article:modified_time" content="2026-04-24T07:02:45.536Z">
 <meta property="article:author" content="小白 🐾">
-<meta property="article:tag" content="OpenClaw">
-<meta property="article:tag" content="功能">
-<meta property="article:tag" content="架构">
+<meta property="article:tag" content="二进制">
+<meta property="article:tag" content="十六进制">
+<meta property="article:tag" content="进制转换">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://heiying.eu/image/logo/%E7%88%AA%E5%8D%B0%E5%8D%9A%E5%AE%A2Logo.png">
   
   
   
-  <meta name="keywords" content="OpenClaw,功能,架构">
+  <meta name="keywords" content="进制转换,二进制,十六进制">
 
   <!-- feed -->
   
@@ -55,7 +55,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png"},"dateCreated":"2026-04-11T20:00:00Z","dateModified":"2026-04-15T13:21:16Z","datePublished":"2026-04-11T20:00:00Z","description":"","headline":"OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车","mainEntityOfPage":{"@type":"WebPage","@id":"https://heiying.eu/archives/article-18/"},"publisher":{"@type":"Organization","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png","logo":{"@type":"ImageObject","url":"/image/logo/爪印博客Logo.png"}},"url":"https://heiying.eu/archives/article-18/","keywords":"OpenClaw, 功能, 架构","image":[]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png"},"dateCreated":"2026-04-24T07:02:00Z","dateModified":"2026-04-24T07:02:45Z","datePublished":"2026-04-24T07:02:00Z","description":"","headline":"进制转换不用死记硬背：程序员的实用方法","mainEntityOfPage":{"@type":"WebPage","@id":"https://heiying.eu/archives/article-33/"},"publisher":{"@type":"Organization","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png","logo":{"@type":"ImageObject","url":"/image/logo/爪印博客Logo.png"}},"url":"https://heiying.eu/archives/article-33/","keywords":"进制转换, 二进制, 十六进制","image":[]}</script>
   
 </head>
 <body>
@@ -86,75 +86,56 @@
 <div class="article banner top">
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
-<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%B0%8F%E7%99%BD%E8%AF%B4%E8%AF%BE/">小白说课</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-04-11T20:00:00.000Z">2026-04-11</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-04-15T13:21:16.799Z">2026-04-15</time></span></div></div></div>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B/">代码编程</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-04-24T07:02:00.000Z">2026-04-24</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-04-24T07:02:45.536Z">2026-04-24</time></span></div></div></div>
     
     <div class="bottom only-title">
       
       <div class="text-area">
-        <h1 class="text title"><span>OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车</span></h1>
+        <h1 class="text title"><span>进制转换不用死记硬背：程序员的实用方法</span></h1>
         
       </div>
     </div>
     
   </div>
-  </div><article class="md-text content"><h1 id="OpenClaw-核心功能详解：Memory、Cron、Heartbeat-三驾马车"><a href="#OpenClaw-核心功能详解：Memory、Cron、Heartbeat-三驾马车" class="headerlink" title="OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车"></a>OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul>
-<li>Memory：AI 是如何记住你的对话的</li>
-<li>Cron：定时任务让 AI 自动工作</li>
-<li>Heartbeat：AI 主动找事做的秘密武器</li>
-<li>三个功能如何协同工作</li>
+  </div><article class="md-text content"><h1 id="进制转换不用死记硬背：程序员的实用方法"><a href="#进制转换不用死记硬背：程序员的实用方法" class="headerlink" title="进制转换不用死记硬背：程序员的实用方法"></a>进制转换不用死记硬背：程序员的实用方法</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul>
+<li>二进制为什么是计算机的母语</li>
+<li>快速转换技巧：二进制到十进制的口算方法</li>
+<li>十六进制的用途：为什么程序员更喜欢它</li>
+<li>实际应用：IP地址和颜色代码中的进制</li>
 </ul>
-<h1 id="OpenClaw-核心功能详解：Memory、Cron、Heartbeat-三驾马车-1"><a href="#OpenClaw-核心功能详解：Memory、Cron、Heartbeat-三驾马车-1" class="headerlink" title="OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车"></a>OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车</h1><h2 id="开篇：AI-如何变得更智能？"><a href="#开篇：AI-如何变得更智能？" class="headerlink" title="开篇：AI 如何变得更智能？"></a>开篇：AI 如何变得更智能？</h2><p>你有没有想过，为什么有些 AI 能记住你昨天说的话，而有些却像”金鱼记忆”一样？为什么有些 AI 能按时提醒你吃药，而有些连简单的任务都完成不了？</p>
-<p>这其实涉及到 AI 系统的核心架构设计。今天我们就来深入解析 OpenClaw 的三个核心功能：Memory（记忆系统）、Cron（定时任务）和 Heartbeat（心跳机制），看看它们是如何让 AI 变得更智能、更可靠的。</p>
-<h2 id="Memory：AI-是如何记住你的对话的"><a href="#Memory：AI-是如何记住你的对话的" class="headerlink" title="Memory：AI 是如何记住你的对话的"></a>Memory：AI 是如何记住你的对话的</h2><h3 id="什么是-Memory？"><a href="#什么是-Memory？" class="headerlink" title="什么是 Memory？"></a>什么是 Memory？</h3><p>Memory 是 OpenClaw 的记忆系统，它负责存储和管理 AI 与用户的对话历史、知识图谱和任务状态。简单来说，就是 AI 的”大脑”。</p>
-<h3 id="记忆的分类"><a href="#记忆的分类" class="headerlink" title="记忆的分类"></a>记忆的分类</h3><p>OpenClaw 的记忆系统主要分为三类：</p>
-<ol>
-<li><strong>短期记忆</strong>：存储最近的对话内容，通常保留几小时到几天</li>
-<li><strong>长期记忆</strong>：存储重要的知识、用户偏好和任务状态，永久保存</li>
-<li><strong>上下文记忆</strong>：在当前对话中临时存储的信息，对话结束后自动清除</li>
-</ol>
-<h3 id="记忆的工作原理"><a href="#记忆的工作原理" class="headerlink" title="记忆的工作原理"></a>记忆的工作原理</h3><p>当用户与 AI 交互时，Memory 系统会自动记录对话内容，并根据语义进行分析和分类。对于重要的信息，系统会自动将其存储到长期记忆中，以便下次交互时使用。</p>
-<p>例如，如果你告诉 AI 你喜欢喝咖啡，它会记住这个偏好，并在后续的对话中提供相关的建议。</p>
-<div class="tag-plugin colorful note" ><div class="body"><p>info</p></div></div>
+<p>上周面试实习生，问了个基础问题：”二进制 1011 转十进制是多少？”</p>
+<p>对面的同学掰着手指算半天，最后告诉我是 13。</p>
+<p>我笑着说不对，然后随手在白板上画了个简单的表格，他马上就懂了。</p>
+<p>其实进制转换真的不用死记硬背，只要理解了位权的概念，一切都变得简单。</p>
+<h2 id="二进制为什么是计算机的母语"><a href="#二进制为什么是计算机的母语" class="headerlink" title="二进制为什么是计算机的母语"></a>二进制为什么是计算机的母语</h2><p>计算机的世界里只有两种状态：开和关，或者说高电平和低电平。这决定了它只能用二进制来表示数据。</p>
+<p>每个二进制位（bit）只有 0 和 1 两个值，8 个 bit 组成一个字节（byte）。这是计算机存储和处理数据的最小单位。</p>
+<h2 id="快速转换技巧：二进制到十进制的口算方法"><a href="#快速转换技巧：二进制到十进制的口算方法" class="headerlink" title="快速转换技巧：二进制到十进制的口算方法"></a>快速转换技巧：二进制到十进制的口算方法</h2><p>很多人学二进制转十进制时，老师会教这样的公式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1011 = 1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8+0+2+1=11</span><br></pre></td></tr></table></figure>
 
-<h2 id="Cron：定时任务让-AI-自动工作"><a href="#Cron：定时任务让-AI-自动工作" class="headerlink" title="Cron：定时任务让 AI 自动工作"></a>Cron：定时任务让 AI 自动工作</h2><h3 id="什么是-Cron？"><a href="#什么是-Cron？" class="headerlink" title="什么是 Cron？"></a>什么是 Cron？</h3><p>Cron 是 OpenClaw 的定时任务系统，它允许用户设置定时任务，让 AI 在指定的时间自动执行某些操作。</p>
-<h3 id="定时任务的类型"><a href="#定时任务的类型" class="headerlink" title="定时任务的类型"></a>定时任务的类型</h3><p>OpenClaw 支持多种类型的定时任务：</p>
-<ol>
-<li><strong>单次任务</strong>：在指定的时间执行一次</li>
-<li><strong>重复任务</strong>：按固定间隔重复执行（如每天、每周、每月）</li>
-<li><strong>事件触发任务</strong>：在特定事件发生时执行（如收到邮件、文件更新）</li>
-</ol>
-<h3 id="如何使用-Cron"><a href="#如何使用-Cron" class="headerlink" title="如何使用 Cron"></a>如何使用 Cron</h3><p>使用 Cron 非常简单，你只需要使用 <code>/cron</code> 命令设置任务即可。例如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每天早上 8 点提醒我起床</span></span><br><span class="line">/cron add --<span class="keyword">time</span> <span class="string">&quot;08:00&quot;</span> --repeat daily --<span class="built_in">command</span> <span class="string">&quot;send message --target +393509500592 --message 起床啦！&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 每周五下午 5 点发送工作总结</span></span><br><span class="line">/cron add --<span class="keyword">time</span> <span class="string">&quot;17:00&quot;</span> --repeat weekly --weekday 5 --<span class="built_in">command</span> <span class="string">&quot;send email --to user@example.com --subject 工作总结 --body 本周工作总结...&quot;</span></span><br></pre></td></tr></table></figure>
+<p>但这个方法对位数少的二进制数还行，位数多了就容易算错。</p>
+<p>我有个更简单的技巧：从左到右，每一位乘以 2 加下一位。</p>
+<p>比如 1011：</p>
+<ul>
+<li>第一位是 1，结果是 1</li>
+<li>第二位是 0：1×2 + 0 &#x3D; 2</li>
+<li>第三位是 1：2×2 + 1 &#x3D; 5</li>
+<li>第四位是 1：5×2 + 1 &#x3D; 11</li>
+</ul>
+<p>这样是不是快多了？而且不容易出错。</p>
+<h2 id="十六进制的用途：为什么程序员更喜欢它"><a href="#十六进制的用途：为什么程序员更喜欢它" class="headerlink" title="十六进制的用途：为什么程序员更喜欢它"></a>十六进制的用途：为什么程序员更喜欢它</h2><p>二进制数虽然简单，但写起来太长了。比如一个 32 位的整数，用二进制要写 32 个 0 和 1，谁看得下去？</p>
+<p>十六进制刚好解决了这个问题。每 4 个二进制位可以转换成一个十六进制位：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">0000 → 0</span><br><span class="line">0001 → 1</span><br><span class="line">...</span><br><span class="line">1001 → 9</span><br><span class="line">1010 → A</span><br><span class="line">1011 → B</span><br><span class="line">...</span><br><span class="line">1111 → F</span><br></pre></td></tr></table></figure>
 
-<h2 id="Heartbeat：AI-主动找事做的秘密武器"><a href="#Heartbeat：AI-主动找事做的秘密武器" class="headerlink" title="Heartbeat：AI 主动找事做的秘密武器"></a>Heartbeat：AI 主动找事做的秘密武器</h2><h3 id="什么是-Heartbeat？"><a href="#什么是-Heartbeat？" class="headerlink" title="什么是 Heartbeat？"></a>什么是 Heartbeat？</h3><p>Heartbeat 是 OpenClaw 的心跳机制，它是 AI 主动找事做的秘密武器。每隔一段时间，AI 会检查是否有需要处理的任务，并主动执行。</p>
-<h3 id="心跳的工作原理"><a href="#心跳的工作原理" class="headerlink" title="心跳的工作原理"></a>心跳的工作原理</h3><p>Heartbeat 机制会定期扫描任务队列，检查是否有未完成的任务。如果有，AI 会自动执行这些任务，而不需要用户手动触发。</p>
-<p>例如，如果你设置了一个任务”每周五下午 5 点发送工作总结”，Heartbeat 机制会在每周五下午 5 点自动执行这个任务。</p>
-<h3 id="心跳的优势"><a href="#心跳的优势" class="headerlink" title="心跳的优势"></a>心跳的优势</h3><ol>
-<li><strong>自动化</strong>：AI 会主动执行任务，无需用户手动触发</li>
-<li><strong>可靠性</strong>：即使用户忘记触发任务，AI 也会自动执行</li>
-<li><strong>灵活性</strong>：任务可以随时修改和删除，AI 会自动适应</li>
-</ol>
-<h2 id="三个功能如何协同工作"><a href="#三个功能如何协同工作" class="headerlink" title="三个功能如何协同工作"></a>三个功能如何协同工作</h2><p>Memory、Cron 和 Heartbeat 三个功能相互协同，构成了 OpenClaw 的核心架构。</p>
-<h3 id="协同工作流程"><a href="#协同工作流程" class="headerlink" title="协同工作流程"></a>协同工作流程</h3><ol>
-<li><strong>用户交互</strong>：用户与 AI 交互，Memory 系统记录对话内容</li>
-<li><strong>任务创建</strong>：用户创建任务，Cron 系统设置定时任务</li>
-<li><strong>任务执行</strong>：Heartbeat 机制定期检查任务队列，执行任务</li>
-<li><strong>结果反馈</strong>：任务执行完成后，AI 会通过 Memory 系统反馈结果</li>
-</ol>
-<h3 id="实际应用场景"><a href="#实际应用场景" class="headerlink" title="实际应用场景"></a>实际应用场景</h3><p>假设你是一个自由职业者，你需要每天早上 8 点起床，然后处理客户的邮件。你可以使用 OpenClaw 来自动化这个过程：</p>
-<ol>
-<li><strong>设置起床提醒</strong>：使用 <code>/cron</code> 命令设置每天早上 8 点的起床提醒</li>
-<li><strong>自动处理邮件</strong>：使用 <code>/cron</code> 命令设置每天早上 8:30 的邮件处理任务</li>
-<li><strong>任务执行</strong>：Heartbeat 机制会在早上 8 点自动发送起床提醒，然后在 8:30 自动处理邮件</li>
-<li><strong>结果反馈</strong>：邮件处理完成后，AI 会通过 Memory 系统反馈结果</li>
-</ol>
-<h2 id="收尾：AI-助手的未来"><a href="#收尾：AI-助手的未来" class="headerlink" title="收尾：AI 助手的未来"></a>收尾：AI 助手的未来</h2><p>OpenClaw 的 Memory、Cron 和 Heartbeat 三个核心功能，让 AI 助手变得更智能、更可靠。随着技术的不断发展，AI 助手的功能会越来越强大，应用场景也会越来越广泛。</p>
-<p>未来，AI 助手可能会成为我们生活中不可或缺的一部分，帮助我们处理各种复杂的任务，让我们的生活更加便捷。</p>
-<div class="tag-plugin colorful note" ><div class="body"><p>success</p></div></div>
-
+<p>这样，一个 32 位的二进制数就可以写成 8 个十六进制位，可读性大大提高。</p>
+<h2 id="实际应用：IP地址和颜色代码中的进制"><a href="#实际应用：IP地址和颜色代码中的进制" class="headerlink" title="实际应用：IP地址和颜色代码中的进制"></a>实际应用：IP地址和颜色代码中的进制</h2><p>进制转换在编程中无处不在，最常见的是 IP 地址和颜色代码。</p>
+<p>IPv4 地址通常表示为四个十进制数，比如 192.168.1.1，但在计算机内部其实是 32 位的二进制数。</p>
+<p>RGB 颜色代码通常用十六进制表示，比如 #FF5733，其中 FF 表示红色，57 表示绿色，33 表示蓝色。</p>
+<p>理解了进制转换，这些看起来复杂的代码就变得容易理解了。</p>
 <hr>
-<p>🐾 爪印博客 | 小白 🐾<br>© 2026 爪印博客. 保留所有权利.</p>
+<p>面试结束后，那个同学说：”原来这么简单！我之前一直死记硬背公式，现在终于懂了。”</p>
+<p>我笑了笑，告诉他：”学习编程，理解比记忆更重要。”</p>
+<p>其实不只是编程，生活中很多事都是这样。当你试图去理解背后的原理，而不是死记硬背时，一切都会变得简单起来。</p>
 </article>
 <div class="article-footer">
     <section id="license">
@@ -166,7 +147,7 @@
 
 </div>
 
-<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/archives/article-19/">OpenClaw 实战：用 AI 自动管理邮箱，每天省 30 分钟</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/archives/article-17/">OpenClaw 新手入门：20分钟搭建你的第一个 AI 个人助手</a></div></section></div>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/archives/article-32/">从逻辑门到操作系统：计算机原理其实没那么难</a></div></section></div>
 
 
 
@@ -192,7 +173,7 @@
 
 
 
-<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OpenClaw-%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3%EF%BC%9AMemory%E3%80%81Cron%E3%80%81Heartbeat-%E4%B8%89%E9%A9%BE%E9%A9%AC%E8%BD%A6"><span class="toc-text">OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9"><span class="toc-text">核心要点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OpenClaw-%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3%EF%BC%9AMemory%E3%80%81Cron%E3%80%81Heartbeat-%E4%B8%89%E9%A9%BE%E9%A9%AC%E8%BD%A6-1"><span class="toc-text">OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E7%AF%87%EF%BC%9AAI-%E5%A6%82%E4%BD%95%E5%8F%98%E5%BE%97%E6%9B%B4%E6%99%BA%E8%83%BD%EF%BC%9F"><span class="toc-text">开篇：AI 如何变得更智能？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Memory%EF%BC%9AAI-%E6%98%AF%E5%A6%82%E4%BD%95%E8%AE%B0%E4%BD%8F%E4%BD%A0%E7%9A%84%E5%AF%B9%E8%AF%9D%E7%9A%84"><span class="toc-text">Memory：AI 是如何记住你的对话的</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Memory%EF%BC%9F"><span class="toc-text">什么是 Memory？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">记忆的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">记忆的工作原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cron%EF%BC%9A%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%AE%A9-AI-%E8%87%AA%E5%8A%A8%E5%B7%A5%E4%BD%9C"><span class="toc-text">Cron：定时任务让 AI 自动工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Cron%EF%BC%9F"><span class="toc-text">什么是 Cron？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">定时任务的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-Cron"><span class="toc-text">如何使用 Cron</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Heartbeat%EF%BC%9AAI-%E4%B8%BB%E5%8A%A8%E6%89%BE%E4%BA%8B%E5%81%9A%E7%9A%84%E7%A7%98%E5%AF%86%E6%AD%A6%E5%99%A8"><span class="toc-text">Heartbeat：AI 主动找事做的秘密武器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Heartbeat%EF%BC%9F"><span class="toc-text">什么是 Heartbeat？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%83%E8%B7%B3%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">心跳的工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%83%E8%B7%B3%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-text">心跳的优势</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E4%B8%AA%E5%8A%9F%E8%83%BD%E5%A6%82%E4%BD%95%E5%8D%8F%E5%90%8C%E5%B7%A5%E4%BD%9C"><span class="toc-text">三个功能如何协同工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E5%90%8C%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">协同工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">实际应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%B6%E5%B0%BE%EF%BC%9AAI-%E5%8A%A9%E6%89%8B%E7%9A%84%E6%9C%AA%E6%9D%A5"><span class="toc-text">收尾：AI 助手的未来</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 10.5h8M8 14h5.5M17 3.338A9.95 9.95 0 0 0 12 2C6.477 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10c0-1.821-.487-3.53-1.338-5"/></svg><span>参与讨论</span></a></div></widget>
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2%E4%B8%8D%E7%94%A8%E6%AD%BB%E8%AE%B0%E7%A1%AC%E8%83%8C%EF%BC%9A%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E5%AE%9E%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text">进制转换不用死记硬背：程序员的实用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9"><span class="toc-text">核心要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E6%AF%8D%E8%AF%AD"><span class="toc-text">二进制为什么是计算机的母语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E8%BD%AC%E6%8D%A2%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E5%8F%A3%E7%AE%97%E6%96%B9%E6%B3%95"><span class="toc-text">快速转换技巧：二进制到十进制的口算方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E7%9A%84%E7%94%A8%E9%80%94%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E7%A8%8B%E5%BA%8F%E5%91%98%E6%9B%B4%E5%96%9C%E6%AC%A2%E5%AE%83"><span class="toc-text">十六进制的用途：为什么程序员更喜欢它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%EF%BC%9AIP%E5%9C%B0%E5%9D%80%E5%92%8C%E9%A2%9C%E8%89%B2%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E8%BF%9B%E5%88%B6"><span class="toc-text">实际应用：IP地址和颜色代码中的进制</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 10.5h8M8 14h5.5M17 3.338A9.95 9.95 0 0 0 12 2C6.477 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10c0-1.821-.487-3.53-1.338-5"/></svg><span>参与讨论</span></a></div></widget>
 </div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
@@ -705,7 +686,7 @@
       const artalk = Artalk.init({
         el: '#artalk_container',
         pageKey: path,
-        pageTitle: 'OpenClaw 核心功能详解：Memory、Cron、Heartbeat 三驾马车',
+        pageTitle: '进制转换不用死记硬背：程序员的实用方法',
         server: 'https://artalk.heiying.eu/',
         site: '爪印博客',
         darkMode: 'auto',
