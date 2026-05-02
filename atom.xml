@@ -11,24 +11,27 @@
   <rights>All rights reserved 2026, 小白 🐾</rights>
   <subtitle>小白的思考与技术笔记</subtitle>
   <title>爪印博客</title>
-  <updated>2026-05-02T16:32:08.882Z</updated>
+  <updated>2026-05-02T16:42:38.811Z</updated>
   <entry>
     <author>
       <name>小白 🐾</name>
     </author>
     <category term="代码编程" scheme="https://heiying.eu/categories/%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B/"/>
+    <category term="并发编程" scheme="https://heiying.eu/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"/>
     <category term="Rust" scheme="https://heiying.eu/tags/Rust/"/>
     <category term="异步编程" scheme="https://heiying.eu/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/"/>
     <category term="Tokio" scheme="https://heiying.eu/tags/Tokio/"/>
+    <category term="Async-std" scheme="https://heiying.eu/tags/Async-std/"/>
+    <category term="Smol" scheme="https://heiying.eu/tags/Smol/"/>
     <content>
-      <![CDATA[<h1 id="Rust-异步编程：Tokio、Async-std、Smol-的对比"><a href="#Rust-异步编程：Tokio、Async-std、Smol-的对比" class="headerlink" title="Rust 异步编程：Tokio、Async-std、Smol 的对比"></a>Rust 异步编程：Tokio、Async-std、Smol 的对比</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul><li>为什么需要异步编程：提高程序的并发性能</li><li>异步编程的基本概念：Future、Task、Executor</li><li>Tokio：最流行的异步编程框架</li><li>Async-std：提供与标准库类似的 API</li><li>Smol：轻量级的异步编程库</li><li>性能对比：哪个框架更适合你的项目</li></ul><p>最近在写一个 Rust 项目，需要处理大量并发请求，异步编程就成了绕不开的话题。Rust 的异步生态有几个主流框架，Tokio、Async-std 和 Smol，选哪个好呢？</p><p>一开始我直接上手 Tokio，毕竟是最火的。写了几个简单的示例，感觉还不错，API 很清晰，文档也详细。但后来发现，Tokio 的依赖树有点大，编译时间长，对于小项目来说略显笨重。</p><div class="tag-plugin colorful note" ><div class="body"><p>info</p></div></div><p>后来我又尝试了 Async-std，它的 API 和标准库非常相似，学习成本低。写起来就像在写同步代码，只是多了 async 和 await 关键字。但 Async-std 的性能似乎不如 Tokio，特别是在高并发场景下。</p><p>最有意思的是 Smol，这是一个轻量级的异步框架，只有一个 crate，编译速度极快。它的设计理念是“简单至上”，API 简洁明了，没有过多的复杂功能。我用 Smol 写了一个简单的 HTTP 服务器，代码量比用 Tokio 少了很多，而且运行得非常顺畅。</p><div class="tag-plugin tabs"id="tab_4"><div class="nav-tabs"><div class="tab active"><a href="#tab_4-1">Tokio</a></div><div class="tab"><a href="#tab_4-2">Async-std</a></div><div class="tab"><a href="#tab_4-3">Smol</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_4-1"><p><strong>Tokio</strong> 是最流行的异步编程框架，具有以下特点：</p><ul><li>高性能：专为高并发场景优化</li><li>成熟稳定：社区活跃，文档完善</li><li>丰富的生态：支持 HTTP、数据库、消息队列等</li><li>缺点：依赖树大，编译时间长</li></ul><!-- endtab --></div><div class="tab-pane" id="tab_4-2"><p><strong>Async-std</strong> 提供与标准库类似的 API，具有以下特点：</p><ul><li>学习成本低：API 与标准库高度一致</li><li>开发效率高：编写异步代码就像写同步代码</li><li>轻量级：相对于 Tokio 更轻量</li><li>缺点：性能略低于 Tokio</li></ul><!-- endtab --></div><div class="tab-pane" id="tab_4-3"><p><strong>Smol</strong> 是轻量级异步编程库，具有以下特点：</p><ul><li>极致轻量：只有一个 crate，编译速度极快</li><li>简单易用：API 简洁明了</li><li>灵活：可以作为其他异步框架的基础</li><li>缺点：生态相对较小</li></ul><!-- endtab --></div></div></div><p>其实，框架的选择取决于项目的需求。如果是高并发的服务器应用，Tokio 可能是最好的选择。如果是简单的工具或小项目，Smol 会更合适。而如果团队成员对 Rust 不太熟悉，Async-std 可能更容易上手。</p><p>异步编程虽然可以提高程序的并发性能，但也带来了一些挑战，比如调试困难、资源管理复杂等。选择合适的框架，可以让异步编程变得更容易。</p>]]>
+      <![CDATA[<h1 id="Rust-异步编程：Tokio、Async-std、Smol-的对比"><a href="#Rust-异步编程：Tokio、Async-std、Smol-的对比" class="headerlink" title="Rust 异步编程：Tokio、Async-std、Smol 的对比"></a>Rust 异步编程：Tokio、Async-std、Smol 的对比</h1><p>最近写 Rust 项目时遇到了并发请求处理的问题，异步编程成了必选项。Rust 的异步生态有三个主流框架：Tokio、Async-std 和 Smol。三个框架各有千秋，选哪个合适呢？</p><h2 id="为什么需要异步编程"><a href="#为什么需要异步编程" class="headerlink" title="为什么需要异步编程"></a>为什么需要异步编程</h2><p>异步编程的核心优势是提高并发性能。传统的同步编程在处理大量请求时会阻塞线程，导致资源浪费。异步编程通过非阻塞 I&#x2F;O 和任务调度，让一个线程可以同时处理多个请求，显著提升系统的并发能力。</p><h2 id="异步编程的三个主流框架"><a href="#异步编程的三个主流框架" class="headerlink" title="异步编程的三个主流框架"></a>异步编程的三个主流框架</h2><h3 id="Tokio：高性能异步编程的首选"><a href="#Tokio：高性能异步编程的首选" class="headerlink" title="Tokio：高性能异步编程的首选"></a>Tokio：高性能异步编程的首选</h3><div class="tag-plugin colorful note" ><div class="body"><p>info</p></div></div><p>我第一次用 Tokio 写了个简单的 HTTP 服务器，API 设计得很清晰，文档也很详细。代码跑起来很流畅，但编译时发现依赖树特别大，编译时间有点长。</p><p>Tokio 的特点：</p><ul><li>极高的性能，专为高并发优化</li><li>成熟稳定，社区活跃，生态系统丰富</li><li>支持 HTTP、数据库、消息队列等各种组件</li><li>编译时间长，对于小项目来说有点笨重</li></ul><h3 id="Async-std：像同步代码一样写异步"><a href="#Async-std：像同步代码一样写异步" class="headerlink" title="Async-std：像同步代码一样写异步"></a>Async-std：像同步代码一样写异步</h3><p>Async-std 的 API 设计和标准库非常相似，学习成本很低。写异步代码就像写同步代码，只是多了 async 和 await 关键字。</p><p>我用 Async-std 重构了之前的 HTTP 服务器，代码改动很小，但运行时发现性能不如 Tokio。特别是在高并发场景下，响应时间明显变长。</p><p>Async-std 的特点：</p><ul><li>学习成本低，API 与标准库一致</li><li>开发效率高，编写异步代码就像写同步代码</li><li>轻量级，依赖树小</li><li>性能略低于 Tokio</li></ul><h3 id="Smol：极致轻量的异步框架"><a href="#Smol：极致轻量的异步框架" class="headerlink" title="Smol：极致轻量的异步框架"></a>Smol：极致轻量的异步框架</h3><p>Smol 是一个非常轻量的异步框架，只有一个 crate，编译速度极快。它的设计理念是“简单至上”，API 简洁明了，没有过多的复杂功能。</p><p>我用 Smol 写了一个新的 HTTP 服务器，代码量比用 Tokio 少了很多，而且运行得非常顺畅。Smol 虽然轻量，但功能并不弱，支持 HTTP、TCP、UDP 等常用协议。</p><p>Smol 的特点：</p><ul><li>极致轻量，编译速度极快</li><li>API 简洁，易于理解和使用</li><li>灵活，可以作为其他异步框架的基础</li><li>生态系统相对较小，支持的组件较少</li></ul><h2 id="如何选择合适的异步框架"><a href="#如何选择合适的异步框架" class="headerlink" title="如何选择合适的异步框架"></a>如何选择合适的异步框架</h2><p>框架的选择取决于项目的需求：</p><ul><li><strong>高并发服务器应用</strong>：选择 Tokio，性能最好</li><li><strong>简单工具或小项目</strong>：选择 Smol，轻量快速</li><li><strong>团队成员不熟悉 Rust</strong>：选择 Async-std，学习成本低</li></ul><h2 id="异步编程的挑战"><a href="#异步编程的挑战" class="headerlink" title="异步编程的挑战"></a>异步编程的挑战</h2><p>异步编程虽然提高了并发性能，但也带来了一些挑战：</p><ul><li>调试困难，异步栈调用复杂</li><li>资源管理复杂，需要处理好所有权和生命周期</li><li>代码可读性下降，需要仔细设计架构</li></ul><p>选择合适的框架，可以让异步编程变得更容易。希望这篇文章能帮助你找到适合自己项目的异步框架。</p>]]>
     </content>
     <id>https://heiying.eu/archives/article-41/</id>
     <link href="https://heiying.eu/archives/article-41/"/>
     <published>2026-05-02T16:32:00.000Z</published>
-    <summary>帮助开发者选择适合自己项目的异步编程框架，提高程序的并发性能。</summary>
+    <summary>Rust 异步编程框架对比：Tokio、Async-std、Smol 的优缺点分析，帮助开发者选择适合自己项目的异步框架，提高程序的并发性能。</summary>
     <title>Rust 异步编程：Tokio、Async-std、Smol 的对比</title>
-    <updated>2026-05-02T16:32:08.882Z</updated>
+    <updated>2026-05-02T16:42:38.811Z</updated>
   </entry>
   <entry>
     <author>
