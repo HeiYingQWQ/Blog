@@ -1,0 +1,944 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 8.1.1">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用 - 爪印博客</title>
+
+  
+    <meta name="description" content="帮助开发者使用 Rust 进行网络编程，实现 TCP、UDP 和 HTTP 通信。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用">
+<meta property="og:url" content="https://heiying.eu/archives/article-44/">
+<meta property="og:site_name" content="爪印博客">
+<meta property="og:description" content="帮助开发者使用 Rust 进行网络编程，实现 TCP、UDP 和 HTTP 通信。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://heiying.eu/image/logo/%E7%88%AA%E5%8D%B0%E5%8D%9A%E5%AE%A2Logo.png">
+<meta property="article:published_time" content="2026-05-03T16:42:00.000Z">
+<meta property="article:modified_time" content="2026-05-03T16:42:51.128Z">
+<meta property="article:author" content="小白 🐾">
+<meta property="article:tag" content="Hyper">
+<meta property="article:tag" content="Rust">
+<meta property="article:tag" content="网络编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://heiying.eu/image/logo/%E7%88%AA%E5%8D%B0%E5%8D%9A%E5%AE%A2Logo.png">
+  
+  
+  
+  <meta name="keywords" content="Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用,网络教程,Rust,网络编程,Hyper">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="爪印博客" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/image/logo/favicon.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png"},"dateCreated":"2026-05-03T16:42:00Z","dateModified":"2026-05-03T16:42:51Z","datePublished":"2026-05-03T16:42:00Z","description":"","headline":"Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用","mainEntityOfPage":{"@type":"WebPage","@id":"https://heiying.eu/archives/article-44/"},"publisher":{"@type":"Organization","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png","logo":{"@type":"ImageObject","url":"/image/logo/爪印博客Logo.png"}},"url":"https://heiying.eu/archives/article-44/","keywords":"Rust, 网络编程, Hyper","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/image/logo/爪印博客Logo.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">爪印博客</div><div class="sub cap">小白的思考与技术笔记</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="主页" href="/"><span>主页</span></a><a class="nav-item" title="关于" href="/about/"><span>关于</span></a><a class="nav-item" title="友链" href="/friends/"><span>友链</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/archives/article-44/"><span class="title">Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用</span></a><a class="item title" href="/archives/article-43/"><span class="title">知识管理工具测评：Notion、Obsidian、Roam Research 的对比</span></a><a class="item title" href="/archives/article-42/"><span class="title">安全隐私保护：防止个人信息泄露的 8 个实用方法</span></a><a class="item title" href="/archives/article-41/"><span class="title">Rust 异步编程：Tokio、Async-std、Smol 的对比</span></a><a class="item title" href="/archives/article-40/"><span class="title">Rust 内存安全：所有权、借用和生命周期的深度解析</span></a><a class="item title" href="/archives/article-39/"><span class="title">跨境电商运营：Shopify 独立站的 5 个优化技巧</span></a><a class="item title" href="/archives/article-38/"><span class="title">树莓派项目实战：从零搭建家庭媒体服务器</span></a><a class="item title" href="/archives/article-37/"><span class="title">Rust 入门教程：从 Hello World 到 Web 开发</span></a><a class="item title" href="/archives/article-36/"><span class="title">编译器原理：代码是怎么变成可执行文件的</span></a><a class="item title" href="/archives/article-22/"><span class="title">OpenClaw 未来展望：AI 个人助理的终极形态</span></a></div></widget>
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/HeiYingQWQ" target="_blank" rel="external nofollow noopener noreferrer"><img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/08a41b181ce68.svg"/></a><a class="social" href="https://heiying.eu/atom.xml" target="_blank" rel="external nofollow noopener noreferrer"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXJzcy1pY29uIGx1Y2lkZS1yc3MiPjxwYXRoIGQ9Ik00IDExYTkgOSAwIDAgMSA5IDkiLz48cGF0aCBkPSJNNCA0YTE2IDE2IDAgMCAxIDE2IDE2Ii8+PGNpcmNsZSBjeD0iNSIgY3k9IjE5IiByPSIxIi8+PC9zdmc+"/></a></div></footer>
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E7%BD%91%E7%BB%9C%E6%95%99%E7%A8%8B/">网络教程</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-05-03T16:42:00.000Z">2026-05-03</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-05-03T16:42:51.128Z">2026-05-03</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="Rust-网络编程：TcpStream、UdpSocket、Hyper-的使用"><a href="#Rust-网络编程：TcpStream、UdpSocket、Hyper-的使用" class="headerlink" title="Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用"></a>Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul>
+<li>为什么 Rust 适合网络编程：安全性、性能、并发性能</li>
+<li>TcpStream：实现可靠的 TCP 通信</li>
+<li>UdpSocket：实现不可靠的 UDP 通信</li>
+<li>Hyper：HTTP 客户端和服务器库</li>
+<li>实际案例：实现一个简单的 HTTP 服务器</li>
+<li>进阶功能：TLS 加密、WebSockets 的支持</li>
+</ul>
+<p>最近在做一个项目，需要用到网络通信。之前一直用 Python，但总觉得性能不够好。朋友推荐了 Rust，说它的网络编程非常高效，于是我决定试试。</p>
+<h2 id="为什么-Rust-适合网络编程"><a href="#为什么-Rust-适合网络编程" class="headerlink" title="为什么 Rust 适合网络编程"></a>为什么 Rust 适合网络编程</h2><p>Rust 之所以适合网络编程，主要有三个原因：安全性、性能和并发性能。</p>
+<p>首先是安全性。Rust 的所有权、借用和生命周期机制可以在编译阶段防止空指针、悬垂引用等常见问题，这意味着你可以写出既安全又高效的代码，而不必担心内存泄漏或段错误。</p>
+<p>其次是性能。Rust 是一门编译型语言，运行时开销非常小，比 Python 快得多。在网络编程中，性能是非常重要的，因为网络通信通常需要处理大量的请求和响应。</p>
+<p>最后是并发性能。Rust 的异步编程模型非常强大，可以让你轻松地处理大量的并发请求。异步编程可以提高程序的响应速度，减少资源浪费。</p>
+<h2 id="TcpStream：实现可靠的-TCP-通信"><a href="#TcpStream：实现可靠的-TCP-通信" class="headerlink" title="TcpStream：实现可靠的 TCP 通信"></a>TcpStream：实现可靠的 TCP 通信</h2><p>TCP 是一种可靠的传输协议，适合传输大量数据。Rust 标准库中的 <code>TcpStream</code> 和 <code>TcpListener</code> 可以让你轻松地实现 TCP 通信。</p>
+<p>我尝试用 <code>TcpStream</code> 实现一个简单的客户端和服务器。服务器端监听端口，接受客户端的连接，然后发送数据。客户端连接到服务器，接收数据。</p>
+<p><strong>服务器端代码：</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::io::Write;</span><br><span class="line"><span class="keyword">use</span> std::net::TcpListener;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">listener</span> = TcpListener::<span class="title function_ invoke__">bind</span>(<span class="string">&quot;127.0.0.1:8080&quot;</span>).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;服务器正在监听端口 8080...&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> <span class="variable">stream</span> <span class="keyword">in</span> listener.<span class="title function_ invoke__">incoming</span>() &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">stream</span> = stream.<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;客户端连接成功&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> <span class="variable">message</span> = <span class="string">&quot;Hello, Client!&quot;</span>;</span><br><span class="line">        stream.<span class="title function_ invoke__">write_all</span>(message.<span class="title function_ invoke__">as_bytes</span>()).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;已发送消息：&#123;&#125;&quot;</span>, message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端代码：</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::io::&#123;Read, Write&#125;;</span><br><span class="line"><span class="keyword">use</span> std::net::TcpStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">stream</span> = TcpStream::<span class="title function_ invoke__">connect</span>(<span class="string">&quot;127.0.0.1:8080&quot;</span>).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;已连接到服务器&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">buffer</span> = [<span class="number">0</span>; <span class="number">1024</span>];</span><br><span class="line">    stream.<span class="title function_ invoke__">read</span>(&amp;<span class="keyword">mut</span> buffer).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;收到消息：&#123;&#125;&quot;</span>, <span class="type">String</span>::<span class="title function_ invoke__">from_utf8_lossy</span>(&amp;buffer));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两段代码非常简单，但它们已经可以实现基本的 TCP 通信。当客户端连接到服务器时，服务器会发送 “Hello, Client!” 消息，客户端会接收并打印出来。</p>
+<h2 id="UdpSocket：实现不可靠的-UDP-通信"><a href="#UdpSocket：实现不可靠的-UDP-通信" class="headerlink" title="UdpSocket：实现不可靠的 UDP 通信"></a>UdpSocket：实现不可靠的 UDP 通信</h2><p>UDP 是一种不可靠的传输协议，但它的速度比 TCP 快得多，适合传输实时数据，如音频和视频。Rust 标准库中的 <code>UdpSocket</code> 可以让你实现 UDP 通信。</p>
+<p>我尝试用 <code>UdpSocket</code> 实现一个简单的客户端和服务器。服务器端监听端口，接收客户端的数据包，然后发送响应。客户端发送数据包到服务器，接收响应。</p>
+<p><strong>服务器端代码：</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::io::Error;</span><br><span class="line"><span class="keyword">use</span> std::net::UdpSocket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;(), Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">socket</span> = UdpSocket::<span class="title function_ invoke__">bind</span>(<span class="string">&quot;127.0.0.1:8080&quot;</span>)?;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;服务器正在监听端口 8080...&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">buffer</span> = [<span class="number">0</span>; <span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">loop</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> (size, src) = socket.<span class="title function_ invoke__">recv_from</span>(&amp;<span class="keyword">mut</span> buffer)?;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;收到来自 &#123;:?&#125; 的数据包：&#123;&#125;&quot;</span>, src, <span class="type">String</span>::<span class="title function_ invoke__">from_utf8_lossy</span>(&amp;buffer[..size]));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> <span class="variable">message</span> = <span class="string">&quot;Hello, Client!&quot;</span>;</span><br><span class="line">        socket.<span class="title function_ invoke__">send_to</span>(message.<span class="title function_ invoke__">as_bytes</span>(), src)?;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;已发送消息：&#123;&#125;&quot;</span>, message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端代码：</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::io::Error;</span><br><span class="line"><span class="keyword">use</span> std::net::UdpSocket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;(), Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">socket</span> = UdpSocket::<span class="title function_ invoke__">bind</span>(<span class="string">&quot;127.0.0.1:0&quot;</span>)?;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">server_addr</span> = <span class="string">&quot;127.0.0.1:8080&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">message</span> = <span class="string">&quot;Hello, Server!&quot;</span>;</span><br><span class="line">    socket.<span class="title function_ invoke__">send_to</span>(message.<span class="title function_ invoke__">as_bytes</span>(), server_addr)?;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;已发送消息：&#123;&#125;&quot;</span>, message);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">buffer</span> = [<span class="number">0</span>; <span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">let</span> (size, src) = socket.<span class="title function_ invoke__">recv_from</span>(&amp;<span class="keyword">mut</span> buffer)?;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;收到来自 &#123;:?&#125; 的数据包：&#123;&#125;&quot;</span>, src, <span class="type">String</span>::<span class="title function_ invoke__">from_utf8_lossy</span>(&amp;buffer[..size]));</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两段代码也非常简单，但它们已经可以实现基本的 UDP 通信。当客户端发送数据包到服务器时，服务器会发送 “Hello, Client!” 响应，客户端会接收并打印出来。</p>
+<h2 id="Hyper：HTTP-客户端和服务器库"><a href="#Hyper：HTTP-客户端和服务器库" class="headerlink" title="Hyper：HTTP 客户端和服务器库"></a>Hyper：HTTP 客户端和服务器库</h2><p>如果你需要开发 HTTP 应用，Hyper 是一个非常好的选择。Hyper 是 Rust 社区最流行的 HTTP 库之一，支持异步编程。</p>
+<p>我尝试用 Hyper 实现一个简单的 HTTP 服务器。服务器端监听端口，接受客户端的请求，然后返回响应。</p>
+<p><strong>服务器端代码：</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> hyper::&#123;Body, Request, Response, Server&#125;;</span><br><span class="line"><span class="keyword">use</span> hyper::service::&#123;make_service_fn, service_fn&#125;;</span><br><span class="line"><span class="keyword">use</span> std::convert::Infallible;</span><br><span class="line"><span class="keyword">use</span> std::net::SocketAddr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">handle_request</span>(req: Request&lt;Body&gt;) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;Response&lt;Body&gt;, Infallible&gt; &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;收到请求：&#123;&#125;&quot;</span>, req.<span class="title function_ invoke__">uri</span>());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">response</span> = Response::<span class="title function_ invoke__">new</span>(Body::<span class="title function_ invoke__">from</span>(<span class="string">&quot;Hello, World!&quot;</span>));</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(response)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[tokio::main]</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">addr</span> = SocketAddr::<span class="title function_ invoke__">from</span>(([<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], <span class="number">8080</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">make_svc</span> = <span class="title function_ invoke__">make_service_fn</span>(|_conn| &#123;</span><br><span class="line">        <span class="keyword">async</span> &#123;</span><br><span class="line">            Ok::&lt;_, Infallible&gt;(<span class="title function_ invoke__">service_fn</span>(handle_request))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">server</span> = Server::<span class="title function_ invoke__">bind</span>(&amp;addr).<span class="title function_ invoke__">serve</span>(make_svc);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;服务器正在监听端口 8080...&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Err</span>(e) = server.<span class="keyword">await</span> &#123;</span><br><span class="line">        <span class="built_in">eprintln!</span>(<span class="string">&quot;服务器错误：&#123;&#125;&quot;</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码非常简单，但它已经可以实现基本的 HTTP 服务器。当客户端发送请求时，服务器会返回 “Hello, World!” 响应。</p>
+<h2 id="实际案例：实现一个简单的-HTTP-服务器"><a href="#实际案例：实现一个简单的-HTTP-服务器" class="headerlink" title="实际案例：实现一个简单的 HTTP 服务器"></a>实际案例：实现一个简单的 HTTP 服务器</h2><p>现在，我将结合前面的知识，实现一个简单的 HTTP 服务器。这个服务器会提供一个简单的 API，返回当前时间。</p>
+<p><strong>代码：</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> hyper::&#123;Body, Request, Response, Server&#125;;</span><br><span class="line"><span class="keyword">use</span> hyper::service::&#123;make_service_fn, service_fn&#125;;</span><br><span class="line"><span class="keyword">use</span> std::convert::Infallible;</span><br><span class="line"><span class="keyword">use</span> std::net::SocketAddr;</span><br><span class="line"><span class="keyword">use</span> chrono::prelude::*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">handle_request</span>(req: Request&lt;Body&gt;) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;Response&lt;Body&gt;, Infallible&gt; &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;收到请求：&#123;&#125;&quot;</span>, req.<span class="title function_ invoke__">uri</span>());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">path</span> = req.<span class="title function_ invoke__">uri</span>().<span class="title function_ invoke__">path</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">response</span> = <span class="keyword">if</span> path == <span class="string">&quot;/time&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">now</span> = Utc::<span class="title function_ invoke__">now</span>();</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">time_str</span> = now.format(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>).<span class="title function_ invoke__">to_string</span>();</span><br><span class="line">        Response::<span class="title function_ invoke__">new</span>(Body::<span class="title function_ invoke__">from</span>(time_str))</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Response::<span class="title function_ invoke__">new</span>(Body::<span class="title function_ invoke__">from</span>(<span class="string">&quot;404 Not Found&quot;</span>))</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(response)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[tokio::main]</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">addr</span> = SocketAddr::<span class="title function_ invoke__">from</span>(([<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], <span class="number">8080</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">make_svc</span> = <span class="title function_ invoke__">make_service_fn</span>(|_conn| &#123;</span><br><span class="line">        <span class="keyword">async</span> &#123;</span><br><span class="line">            Ok::&lt;_, Infallible&gt;(<span class="title function_ invoke__">service_fn</span>(handle_request))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">server</span> = Server::<span class="title function_ invoke__">bind</span>(&amp;addr).<span class="title function_ invoke__">serve</span>(make_svc);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;服务器正在监听端口 8080...&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Err</span>(e) = server.<span class="keyword">await</span> &#123;</span><br><span class="line">        <span class="built_in">eprintln!</span>(<span class="string">&quot;服务器错误：&#123;&#125;&quot;</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码使用了 <code>chrono</code> 库来获取当前时间。当客户端发送请求到 <code>/time</code> 路径时，服务器会返回当前时间；当发送到其他路径时，服务器会返回 404 响应。</p>
+<h2 id="进阶功能：TLS-加密、WebSockets-的支持"><a href="#进阶功能：TLS-加密、WebSockets-的支持" class="headerlink" title="进阶功能：TLS 加密、WebSockets 的支持"></a>进阶功能：TLS 加密、WebSockets 的支持</h2><p>如果你需要更高级的功能，如 TLS 加密和 WebSockets 支持，Hyper 也提供了相应的功能。你可以使用 <code>hyper-tls</code> 库来实现 TLS 加密，使用 <code>hyper-websocket</code> 库来实现 WebSockets 支持。</p>
+<h3 id="TLS-加密"><a href="#TLS-加密" class="headerlink" title="TLS 加密"></a>TLS 加密</h3><p><strong>代码：</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> hyper::Server;</span><br><span class="line"><span class="keyword">use</span> hyper::service::&#123;make_service_fn, service_fn&#125;;</span><br><span class="line"><span class="keyword">use</span> hyper_tls::HttpsConnector;</span><br><span class="line"><span class="keyword">use</span> std::net::SocketAddr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">handle_request</span>(req: Request&lt;Body&gt;) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;Response&lt;Body&gt;, Infallible&gt; &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;收到请求：&#123;&#125;&quot;</span>, req.<span class="title function_ invoke__">uri</span>());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">response</span> = Response::<span class="title function_ invoke__">new</span>(Body::<span class="title function_ invoke__">from</span>(<span class="string">&quot;Hello, TLS!&quot;</span>));</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(response)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[tokio::main]</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">addr</span> = SocketAddr::<span class="title function_ invoke__">from</span>(([<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], <span class="number">8080</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">make_svc</span> = <span class="title function_ invoke__">make_service_fn</span>(|_conn| &#123;</span><br><span class="line">        <span class="keyword">async</span> &#123;</span><br><span class="line">            Ok::&lt;_, Infallible&gt;(<span class="title function_ invoke__">service_fn</span>(handle_request))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">server</span> = Server::<span class="title function_ invoke__">bind</span>(&amp;addr).<span class="title function_ invoke__">serve</span>(make_svc);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;服务器正在监听端口 8080...&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Err</span>(e) = server.<span class="keyword">await</span> &#123;</span><br><span class="line">        <span class="built_in">eprintln!</span>(<span class="string">&quot;服务器错误：&#123;&#125;&quot;</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="WebSockets-支持"><a href="#WebSockets-支持" class="headerlink" title="WebSockets 支持"></a>WebSockets 支持</h3><p><strong>代码：</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> hyper::Server;</span><br><span class="line"><span class="keyword">use</span> hyper::service::&#123;make_service_fn, service_fn&#125;;</span><br><span class="line"><span class="keyword">use</span> hyper_websocket::WebSocket;</span><br><span class="line"><span class="keyword">use</span> std::net::SocketAddr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">handle_request</span>(req: Request&lt;Body&gt;) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;Response&lt;Body&gt;, Infallible&gt; &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;收到请求：&#123;&#125;&quot;</span>, req.<span class="title function_ invoke__">uri</span>());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">ws</span> = WebSocket::<span class="title function_ invoke__">from_request</span>(req).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    <span class="keyword">let</span> (<span class="keyword">mut</span> sender, <span class="keyword">mut</span> receiver) = ws.<span class="title function_ invoke__">split</span>();</span><br><span class="line"></span><br><span class="line">    tokio::<span class="title function_ invoke__">spawn</span>(<span class="keyword">async</span> <span class="keyword">move</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">count</span> = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">loop</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="variable">message</span> = <span class="built_in">format!</span>(<span class="string">&quot;Message &#123;&#125;&quot;</span>, count);</span><br><span class="line">            sender.<span class="title function_ invoke__">send</span>(Message::<span class="title function_ invoke__">Text</span>(message)).<span class="keyword">await</span>.<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">            count += <span class="number">1</span>;</span><br><span class="line">            tokio::time::<span class="title function_ invoke__">sleep</span>(std::time::Duration::<span class="title function_ invoke__">from_secs</span>(<span class="number">1</span>)).<span class="keyword">await</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(Response::<span class="title function_ invoke__">new</span>(Body::<span class="title function_ invoke__">empty</span>()))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[tokio::main]</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">addr</span> = SocketAddr::<span class="title function_ invoke__">from</span>(([<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], <span class="number">8080</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">make_svc</span> = <span class="title function_ invoke__">make_service_fn</span>(|_conn| &#123;</span><br><span class="line">        <span class="keyword">async</span> &#123;</span><br><span class="line">            Ok::&lt;_, Infallible&gt;(<span class="title function_ invoke__">service_fn</span>(handle_request))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">server</span> = Server::<span class="title function_ invoke__">bind</span>(&amp;addr).<span class="title function_ invoke__">serve</span>(make_svc);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;服务器正在监听端口 8080...&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Err</span>(e) = server.<span class="keyword">await</span> &#123;</span><br><span class="line">        <span class="built_in">eprintln!</span>(<span class="string">&quot;服务器错误：&#123;&#125;&quot;</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这些代码只是简单的示例，实际应用中你需要根据自己的需求进行修改。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>通过这几天的学习，我已经对 Rust 的网络编程有了初步的了解。Rust 的网络编程非常强大，它的安全性、性能和并发性能都非常出色。</p>
+<p>如果你也想学习 Rust 的网络编程，我建议你从基本的 TCP 和 UDP 通信开始，然后逐步学习更高级的功能，如 HTTP、TLS 加密和 WebSockets 支持。</p>
+<p>最后，我希望你能在学习过程中保持耐心和热情，因为 Rust 的学习曲线比较陡峭，但它的回报也是非常丰厚的。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/archives/article-43/">知识管理工具测评：Notion、Obsidian、Roam Research 的对比</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body artalk'>
+      
+
+<div class="artalk with-fancybox" id="artalk_container"><svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg></div>
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="sitemap" style="column-count:3;"><div class="sitemap-group"><span class="fs15">统计</span><a href="/"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><p><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></p></a></div><div class="sitemap-group"><span class="fs15">声明</span><a href="/"><a href="/about/" target="_blank">关于本站</a></a><a href="/"><a href="" target="_blank">隐私声明</a></a><a href="/"><a href="" target="_blank">免责声明</a></a></div><div class="sitemap-group"><span class="fs15">备案</span><a href="/"><a href="https://icp.gov.moe/?keyword=20260330" target="_blank"><img src="/assets/svg/meng.svg" width="135" height="20"></a></a><a href="/"><a href="#" target="_blank"><img src="/assets/svg/Copyright.svg" width="135" height="20"></a></a></div></div><div class="text"><p>本站由 <a href="/">小白 🐾</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Rust-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%9ATcpStream%E3%80%81UdpSocket%E3%80%81Hyper-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9"><span class="toc-text">核心要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-Rust-%E9%80%82%E5%90%88%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B"><span class="toc-text">为什么 Rust 适合网络编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TcpStream%EF%BC%9A%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%9D%A0%E7%9A%84-TCP-%E9%80%9A%E4%BF%A1"><span class="toc-text">TcpStream：实现可靠的 TCP 通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UdpSocket%EF%BC%9A%E5%AE%9E%E7%8E%B0%E4%B8%8D%E5%8F%AF%E9%9D%A0%E7%9A%84-UDP-%E9%80%9A%E4%BF%A1"><span class="toc-text">UdpSocket：实现不可靠的 UDP 通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hyper%EF%BC%9AHTTP-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BA%93"><span class="toc-text">Hyper：HTTP 客户端和服务器库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E6%A1%88%E4%BE%8B%EF%BC%9A%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-HTTP-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">实际案例：实现一个简单的 HTTP 服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E5%8A%9F%E8%83%BD%EF%BC%9ATLS-%E5%8A%A0%E5%AF%86%E3%80%81WebSockets-%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-text">进阶功能：TLS 加密、WebSockets 的支持</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E5%8A%A0%E5%AF%86"><span class="toc-text">TLS 加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebSockets-%E6%94%AF%E6%8C%81"><span class="toc-text">WebSockets 支持</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-text">结语</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 10.5h8M8 14h5.5M17 3.338A9.95 9.95 0 0 0 12 2C6.477 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10c0-1.821-.487-3.53-1.338-5"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+  <script type="module">
+  const el = document.getElementById('artalk_container');
+  util.viewportLazyload(el, load_artalk, false);
+
+  function load_artalk() {
+    if (!el) return;
+    utils.css('https://artalk.heiying.eu/dist/Artalk.css');
+    utils.js('https://artalk.heiying.eu/dist/Artalk.js', {defer: true}).then(function () {
+      // 监听 Artalk 事件
+      // FIXME: Artalk开启了懒加载会导致评论输入预览框里的图也变成data-src，导致看不到图
+      // Artalk.use((ctx) => {
+      //   ctx.on('list-loaded', () => window.lazyLoadInstance?.update())
+      // })
+      const path = el.getAttribute('comment_id') ?? decodeURI(window.location.pathname);
+      const artalk = Artalk.init({
+        el: '#artalk_container',
+        pageKey: path,
+        pageTitle: 'Rust 网络编程：TcpStream、UdpSocket、Hyper 的使用',
+        server: 'https://artalk.heiying.eu/',
+        site: '爪印博客',
+        darkMode: 'auto',
+        
+      });
+    });
+  }
+</script>
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PL6R5M22HZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PL6R5M22HZ');
+  // 爪印博客自定义 JavaScript
+  console.log('爪印博客自定义 JavaScript 已加载');
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('页面加载完成');
+  });
+</script>
+
+
+
+<!-- inject -->
+
+</div></body></html>
