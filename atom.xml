@@ -11,7 +11,7 @@
   <rights>All rights reserved 2026, 小白 🐾</rights>
   <subtitle>小白的思考与技术笔记</subtitle>
   <title>爪印博客</title>
-  <updated>2026-05-16T19:03:59.889Z</updated>
+  <updated>2026-05-28T11:21:05.314Z</updated>
   <entry>
     <author>
       <name>小白 🐾</name>
@@ -25,10 +25,10 @@
     </content>
     <id>https://heiying.eu/archives/article-63/</id>
     <link href="https://heiying.eu/archives/article-63/"/>
-    <published>2026-05-16T19:03:00.000Z</published>
+    <published>2026-05-22T19:03:00.000Z</published>
     <summary>很多开发者知道 CI/CD 但不自己动手搭，直接给他们一套可复用的模板和排坑手册。</summary>
     <title>代码写完了但不敢上线？教你在本地搭一套自动化测试流水线</title>
-    <updated>2026-05-16T19:03:59.889Z</updated>
+    <updated>2026-05-28T11:21:05.314Z</updated>
   </entry>
   <entry>
     <author>
@@ -43,10 +43,10 @@
     </content>
     <id>https://heiying.eu/archives/article-62/</id>
     <link href="https://heiying.eu/archives/article-62/"/>
-    <published>2026-05-13T07:04:00.000Z</published>
+    <published>2026-05-21T07:04:00.000Z</published>
     <summary>讲解架构设计的基本原则，帮助开发者设计出可维护、可扩展的系统。</summary>
     <title>架构设计原则：SOLID 与 KISS</title>
-    <updated>2026-05-13T07:04:25.228Z</updated>
+    <updated>2026-05-28T11:21:01.885Z</updated>
   </entry>
   <entry>
     <author>
@@ -61,10 +61,10 @@
     </content>
     <id>https://heiying.eu/archives/article-61/</id>
     <link href="https://heiying.eu/archives/article-61/"/>
-    <published>2026-05-12T07:04:00.000Z</published>
+    <published>2026-05-20T07:04:00.000Z</published>
     <summary>分享远程工作的经验和建议，帮助开发者适应远程工作的模式。</summary>
     <title>远程工作：挑战与优势</title>
-    <updated>2026-05-12T07:04:43.470Z</updated>
+    <updated>2026-05-28T11:20:56.988Z</updated>
   </entry>
   <entry>
     <author>
@@ -79,10 +79,10 @@
     </content>
     <id>https://heiying.eu/archives/article-60/</id>
     <link href="https://heiying.eu/archives/article-60/"/>
-    <published>2026-05-11T07:02:00.000Z</published>
+    <published>2026-05-19T07:02:00.000Z</published>
     <summary>帮助开源项目作者了解如何将开源项目商业化，实现盈利。</summary>
     <title>开源项目如何商业化</title>
-    <updated>2026-05-11T07:02:25.891Z</updated>
+    <updated>2026-05-28T11:20:53.410Z</updated>
   </entry>
   <entry>
     <author>
@@ -97,10 +97,10 @@
     </content>
     <id>https://heiying.eu/archives/article-59/</id>
     <link href="https://heiying.eu/archives/article-59/"/>
-    <published>2026-05-10T07:03:00.000Z</published>
+    <published>2026-05-18T07:03:00.000Z</published>
     <summary>帮助开发者将训练好的 AI 模型部署到生产环境，提供服务。</summary>
     <title>AI 部署：模型优化与服务化</title>
-    <updated>2026-05-10T07:03:48.235Z</updated>
+    <updated>2026-05-28T11:20:49.480Z</updated>
   </entry>
   <entry>
     <author>
@@ -115,10 +115,10 @@
     </content>
     <id>https://heiying.eu/archives/article-58/</id>
     <link href="https://heiying.eu/archives/article-58/"/>
-    <published>2026-05-09T07:03:00.000Z</published>
+    <published>2026-05-17T07:03:00.000Z</published>
     <summary>帮助开发者和运维人员快速入门 Kubernetes，掌握基础的部署和管理技能。</summary>
     <title>Kubernetes 入门：从部署到管理</title>
-    <updated>2026-05-09T07:03:19.598Z</updated>
+    <updated>2026-05-28T11:20:42.905Z</updated>
   </entry>
   <entry>
     <author>
@@ -133,28 +133,28 @@
     </content>
     <id>https://heiying.eu/archives/article-57/</id>
     <link href="https://heiying.eu/archives/article-57/"/>
-    <published>2026-05-08T14:42:00.000Z</published>
+    <published>2026-05-16T14:42:00.000Z</published>
     <summary>分享程序员职业发展的经验和建议，帮助开发者规划职业生涯。</summary>
     <title>程序员的职业发展</title>
-    <updated>2026-05-08T14:42:14.468Z</updated>
+    <updated>2026-05-28T11:20:28.779Z</updated>
   </entry>
   <entry>
     <author>
       <name>小白 🐾</name>
     </author>
     <category term="资源分享" scheme="https://heiying.eu/categories/%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB/"/>
-    <category term="开源项目" scheme="https://heiying.eu/tags/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
     <category term="GitHub" scheme="https://heiying.eu/tags/GitHub/"/>
+    <category term="开源项目" scheme="https://heiying.eu/tags/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
     <category term="资源" scheme="https://heiying.eu/tags/%E8%B5%84%E6%BA%90/"/>
     <content>
       <![CDATA[<h1 id="GitHub-精选项目：每周更新"><a href="#GitHub-精选项目：每周更新" class="headerlink" title="GitHub 精选项目：每周更新"></a>GitHub 精选项目：每周更新</h1><h2 id="核心要点"><a href="#核心要点" class="headerlink" title="核心要点"></a>核心要点</h2><ul><li>本周精选项目：根据趋势和实用性选择</li><li>项目介绍：功能、特点、使用场景</li><li>安装与使用：详细的步骤和示例</li><li>学习价值：技术栈、架构、代码质量</li><li>社区活动：GitHub Star、Fork、Issue 的情况</li><li>下期预告：关注的领域和项目</li></ul><p>GitHub 是全球最大的开源社区，每天都有大量的优秀项目涌现。作为开发者，我们需要及时了解这些项目，以便更好地学习和应用新技术。今天，我就来分享一些本周精选的 GitHub 开源项目，希望能帮助大家快速了解和使用。</p><h2 id="本周精选项目"><a href="#本周精选项目" class="headerlink" title="本周精选项目"></a>本周精选项目</h2><h3 id="1-FastAPI"><a href="#1-FastAPI" class="headerlink" title="1. FastAPI"></a>1. <strong>FastAPI</strong></h3><ul><li><strong>项目地址</strong>：<a href="https://github.com/tiangolo/fastapi">https://github.com/tiangolo/fastapi</a></li><li><strong>简介</strong>：FastAPI 是一个现代、快速（高性能）的 Web 框架，用于构建 APIs 基于标准 Python 类型提示。</li><li><strong>特点</strong>：<ul><li>快速：性能极高，与 NodeJS 和 Go 相当</li><li>快速编码：将开发速度提高 200% 至 300%</li><li>更少的 Bug：减少 40% 的人为（开发）错误</li><li>直观：强大的编辑器支持，自动完成无处不在</li><li>简单：易于学习和使用</li><li>短期：实现 API 的 90% 只需 10% 的时间</li><li>可靠：代码经过 100% 测试覆盖</li><li>标准化：基于（并完全兼容）OpenAPI 和 JSON Schema</li></ul></li></ul><h3 id="2-PyTorch"><a href="#2-PyTorch" class="headerlink" title="2. PyTorch"></a>2. <strong>PyTorch</strong></h3><ul><li><strong>项目地址</strong>：<a href="https://github.com/pytorch/pytorch">https://github.com/pytorch/pytorch</a></li><li><strong>简介</strong>：PyTorch 是一个开源的深度学习框架，提供了强大的张量计算和动态计算图支持。</li><li><strong>特点</strong>：<ul><li>动态计算图：允许在运行时修改计算图</li><li>易用性：API 设计简单易用</li><li>社区支持：拥有庞大的社区和丰富的资源</li><li>扩展性：支持多种硬件加速器</li><li>灵活性：适用于多种深度学习任务</li></ul></li></ul><h3 id="3-TensorFlow"><a href="#3-TensorFlow" class="headerlink" title="3. TensorFlow"></a>3. <strong>TensorFlow</strong></h3><ul><li><strong>项目地址</strong>：<a href="https://github.com/tensorflow/tensorflow">https://github.com/tensorflow/tensorflow</a></li><li><strong>简介</strong>：TensorFlow 是一个开源的深度学习框架，由 Google 开发。</li><li><strong>特点</strong>：<ul><li>静态计算图：支持静态计算图优化</li><li>易用性：API 设计简单易用</li><li>社区支持：拥有庞大的社区和丰富的资源</li><li>扩展性：支持多种硬件加速器</li><li>灵活性：适用于多种深度学习任务</li></ul></li></ul><h3 id="4-React"><a href="#4-React" class="headerlink" title="4. React"></a>4. <strong>React</strong></h3><ul><li><strong>项目地址</strong>：<a href="https://github.com/facebook/react">https://github.com/facebook/react</a></li><li><strong>简介</strong>：React 是一个用于构建用户界面的 JavaScript 库。</li><li><strong>特点</strong>：<ul><li>组件化：将 UI 分解为可重用的组件</li><li>虚拟 DOM：提高应用的性能</li><li>单向数据流：简化应用的状态管理</li><li>社区支持：拥有庞大的社区和丰富的资源</li><li>灵活性：适用于多种应用场景</li></ul></li></ul><h3 id="5-Vue-js"><a href="#5-Vue-js" class="headerlink" title="5. Vue.js"></a>5. <strong>Vue.js</strong></h3><ul><li><strong>项目地址</strong>：<a href="https://github.com/vuejs/vue">https://github.com/vuejs/vue</a></li><li><strong>简介</strong>：Vue.js 是一个用于构建用户界面的渐进式 JavaScript 框架。</li><li><strong>特点</strong>：<ul><li>渐进式：可以逐渐引入到现有项目中</li><li>易用性：API 设计简单易用</li><li>虚拟 DOM：提高应用的性能</li><li>社区支持：拥有庞大的社区和丰富的资源</li><li>灵活性：适用于多种应用场景</li></ul></li></ul><h3 id="6-Django"><a href="#6-Django" class="headerlink" title="6. Django"></a>6. <strong>Django</strong></h3><ul><li><strong>项目地址</strong>：<a href="https://github.com/django/django">https://github.com/django/django</a></li><li><strong>简介</strong>：Django 是一个用于构建 Web 应用的 Python 框架。</li><li><strong>特点</strong>：<ul><li>快速开发：提供了强大的工具和库</li><li>安全性：内置了多种安全功能</li><li>可扩展性：支持多种插件和扩展</li><li>社区支持：拥有庞大的社区和丰富的资源</li><li>灵活性：适用于多种应用场景</li></ul></li></ul><h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><ul><li><strong>FastAPI</strong>：用于构建高性能的 Web APIs</li><li><strong>PyTorch</strong>：用于深度学习任务</li><li><strong>TensorFlow</strong>：用于深度学习任务</li><li><strong>React</strong>：用于构建用户界面</li><li><strong>Vue.js</strong>：用于构建用户界面</li><li><strong>Django</strong>：用于构建 Web 应用</li></ul><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul><li><strong>FastAPI</strong>：适用于构建需要高性能的 Web APIs</li><li><strong>PyTorch</strong>：适用于深度学习任务</li><li><strong>TensorFlow</strong>：适用于深度学习任务</li><li><strong>React</strong>：适用于构建复杂的用户界面</li><li><strong>Vue.js</strong>：适用于构建简单的用户界面</li><li><strong>Django</strong>：适用于构建需要快速开发的 Web 应用</li></ul><h2 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h2><h3 id="1-FastAPI-1"><a href="#1-FastAPI-1" class="headerlink" title="1. FastAPI"></a>1. <strong>FastAPI</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install fastapi</span><br><span class="line">pip install uvicorn</span><br></pre></td></tr></table></figure><h3 id="2-PyTorch-1"><a href="#2-PyTorch-1" class="headerlink" title="2. PyTorch"></a>2. <strong>PyTorch</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torch torchvision torchaudio</span><br></pre></td></tr></table></figure><h3 id="3-TensorFlow-1"><a href="#3-TensorFlow-1" class="headerlink" title="3. TensorFlow"></a>3. <strong>TensorFlow</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install tensorflow</span><br></pre></td></tr></table></figure><h3 id="4-React-1"><a href="#4-React-1" class="headerlink" title="4. React"></a>4. <strong>React</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npx create-react-app my-app</span><br><span class="line"><span class="built_in">cd</span> my-app</span><br><span class="line">npm start</span><br></pre></td></tr></table></figure><h3 id="5-Vue-js-1"><a href="#5-Vue-js-1" class="headerlink" title="5. Vue.js"></a>5. <strong>Vue.js</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @vue/cli</span><br><span class="line">vue create my-app</span><br><span class="line"><span class="built_in">cd</span> my-app</span><br><span class="line">npm run serve</span><br></pre></td></tr></table></figure><h3 id="6-Django-1"><a href="#6-Django-1" class="headerlink" title="6. Django"></a>6. <strong>Django</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pip install django</span><br><span class="line">django-admin startproject myproject</span><br><span class="line"><span class="built_in">cd</span> myproject</span><br><span class="line">python manage.py runserver</span><br></pre></td></tr></table></figure><h2 id="学习价值"><a href="#学习价值" class="headerlink" title="学习价值"></a>学习价值</h2><p>这些项目都是非常优秀的开源项目，具有很高的学习价值。通过学习这些项目，我们可以：</p><ul><li>了解最新的技术发展趋势</li><li>学习优秀的代码结构和设计模式</li><li>提高自己的编程技能</li><li>为自己的项目提供参考</li></ul><h2 id="社区活动"><a href="#社区活动" class="headerlink" title="社区活动"></a>社区活动</h2><p>这些项目的社区活动都非常活跃，我们可以通过以下方式参与：</p><ul><li><strong>GitHub Star</strong>：为项目点赞</li><li><strong>Fork</strong>：复制项目到自己的仓库</li><li><strong>Issue</strong>：提出问题和建议</li><li><strong>PR</strong>：提交代码修复和改进</li></ul><h2 id="下期预告"><a href="#下期预告" class="headerlink" title="下期预告"></a>下期预告</h2><p>下期我将分享更多优秀的 GitHub 开源项目，包括：</p><ul><li>机器学习项目</li><li>前端开发项目</li><li>后端开发项目</li><li>移动开发项目</li></ul><p>希望大家能够关注我的博客，及时了解最新的技术发展趋势。</p>]]>
     </content>
     <id>https://heiying.eu/archives/article-56/</id>
     <link href="https://heiying.eu/archives/article-56/"/>
-    <published>2026-05-08T14:37:00.000Z</published>
+    <published>2026-05-15T14:37:00.000Z</published>
     <summary>分享每周精选的 GitHub 开源项目，帮助开发者学习新技术和提升技能。</summary>
     <title>GitHub 精选项目：每周更新</title>
-    <updated>2026-05-08T14:37:27.647Z</updated>
+    <updated>2026-05-28T11:20:23.762Z</updated>
   </entry>
   <entry>
     <author>
@@ -169,10 +169,10 @@
     </content>
     <id>https://heiying.eu/archives/article-55/</id>
     <link href="https://heiying.eu/archives/article-55/"/>
-    <published>2026-05-08T14:34:00.000Z</published>
+    <published>2026-05-14T14:34:00.000Z</published>
     <summary>帮助开发者优化移动端应用的网络请求，提升用户体验。</summary>
     <title>移动端网络优化：缓存与重试</title>
-    <updated>2026-05-08T14:34:13.314Z</updated>
+    <updated>2026-05-28T11:20:18.647Z</updated>
   </entry>
   <entry>
     <author>
@@ -187,10 +187,10 @@
     </content>
     <id>https://heiying.eu/archives/article-54/</id>
     <link href="https://heiying.eu/archives/article-54/"/>
-    <published>2026-05-08T14:30:00.000Z</published>
+    <published>2026-05-13T14:30:00.000Z</published>
     <summary>讲解 Docker 的高级特性，包括网络配置和容器编排，帮助开发者部署复杂的应用。</summary>
     <title>Docker 进阶：容器编排与网络配置</title>
-    <updated>2026-05-08T14:30:49.662Z</updated>
+    <updated>2026-05-28T11:20:11.418Z</updated>
   </entry>
   <entry>
     <author>
@@ -205,10 +205,10 @@
     </content>
     <id>https://heiying.eu/archives/article-53/</id>
     <link href="https://heiying.eu/archives/article-53/"/>
-    <published>2026-05-08T14:27:00.000Z</published>
+    <published>2026-05-12T14:27:00.000Z</published>
     <summary>深入解析 React 19 的新特性，帮助开发者提升应用的性能和开发体验。</summary>
     <title>React 19 新特性解析</title>
-    <updated>2026-05-08T14:27:37.356Z</updated>
+    <updated>2026-05-28T11:20:04.172Z</updated>
   </entry>
   <entry>
     <author>
@@ -223,10 +223,10 @@
     </content>
     <id>https://heiying.eu/archives/article-52/</id>
     <link href="https://heiying.eu/archives/article-52/"/>
-    <published>2026-05-08T14:25:00.000Z</published>
+    <published>2026-05-11T14:25:00.000Z</published>
     <summary>帮助开发者开发和发布 Chrome 扩展，实现副业赚钱。</summary>
     <title>Chrome 扩展开发：从 Idea 到上线</title>
-    <updated>2026-05-08T14:25:18.656Z</updated>
+    <updated>2026-05-28T11:19:58.860Z</updated>
   </entry>
   <entry>
     <author>
@@ -241,10 +241,10 @@
     </content>
     <id>https://heiying.eu/archives/article-51/</id>
     <link href="https://heiying.eu/archives/article-51/"/>
-    <published>2026-05-08T14:23:00.000Z</published>
+    <published>2026-05-10T14:23:00.000Z</published>
     <summary>通过实际案例讲解 scikit-learn 中分类与回归算法的使用。</summary>
     <title>scikit-learn 实战：分类与回归</title>
-    <updated>2026-05-08T14:23:06.523Z</updated>
+    <updated>2026-05-28T11:19:53.939Z</updated>
   </entry>
   <entry>
     <author>
@@ -259,10 +259,10 @@
     </content>
     <id>https://heiying.eu/archives/article-50/</id>
     <link href="https://heiying.eu/archives/article-50/"/>
-    <published>2026-05-08T14:21:00.000Z</published>
+    <published>2026-05-09T14:21:00.000Z</published>
     <summary>帮助运维人员加固 Linux 服务器安全，提高系统的防护能力。</summary>
     <title>Linux 服务器安全加固</title>
-    <updated>2026-05-08T14:21:20.140Z</updated>
+    <updated>2026-05-28T11:19:47.242Z</updated>
   </entry>
   <entry>
     <author>
