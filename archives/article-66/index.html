@@ -1,0 +1,951 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 8.1.1">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>从零实现一个带重试和超时的异步任务队列 - 爪印博客</title>
+
+  
+    <meta name="description" content="不依赖第三方队列库，用 Node.js 从零实现一个带并发限制、超时、指数退避、优雅关闭和测试的异步任务队列。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零实现一个带重试和超时的异步任务队列">
+<meta property="og:url" content="https://heiying.eu/archives/article-66/">
+<meta property="og:site_name" content="爪印博客">
+<meta property="og:description" content="不依赖第三方队列库，用 Node.js 从零实现一个带并发限制、超时、指数退避、优雅关闭和测试的异步任务队列。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://heiying.eu/image/logo/%E7%88%AA%E5%8D%B0%E5%8D%9A%E5%AE%A2Logo.png">
+<meta property="article:published_time" content="2026-09-09T11:22:50.000Z">
+<meta property="article:modified_time" content="2026-09-09T11:31:49.265Z">
+<meta property="article:author" content="小白 🐾">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="并发">
+<meta property="article:tag" content="异步">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://heiying.eu/image/logo/%E7%88%AA%E5%8D%B0%E5%8D%9A%E5%AE%A2Logo.png">
+  
+  
+  
+  <meta name="keywords" content="Node.js,异步,并发">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="爪印博客" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/image/logo/favicon.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png"},"dateCreated":"2026-09-09T11:22:50Z","dateModified":"2026-09-09T11:31:49Z","datePublished":"2026-09-09T11:22:50Z","description":"","headline":"从零实现一个带重试和超时的异步任务队列","mainEntityOfPage":{"@type":"WebPage","@id":"https://heiying.eu/archives/article-66/"},"publisher":{"@type":"Organization","name":"小白 🐾","sameAs":[],"image":"/image/logo/爪印博客Logo.png","logo":{"@type":"ImageObject","url":"/image/logo/爪印博客Logo.png"}},"url":"https://heiying.eu/archives/article-66/","keywords":"Node.js, 异步, 并发","image":[]}</script>
+  
+<meta name="zhuayin-release" content="zhuayin-release-e50978d546277eafe75a7730d7cfc6c372d806222d3b056f357397ab99bee8b1"></head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/image/logo/爪印博客Logo.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">爪印博客</div><div class="sub cap">小白的思考与技术笔记</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="主页" href="/"><span>主页</span></a><a class="nav-item" title="关于" href="/about/"><span>关于</span></a><a class="nav-item" title="友链" href="/friends/"><span>友链</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/archives/article-66/"><span class="title">从零实现一个带重试和超时的异步任务队列</span></a><a class="item title" href="/archives/article-65/"><span class="title">1.9TB U 盘的惊喜，只维持了三分钟</span></a><a class="item title" href="/archives/article-64/"><span class="title">停更的这几个月，我没有在憋大招</span></a><a class="item title" href="/archives/article-63/"><span class="title">代码写完了但不敢上线？教你在本地搭一套自动化测试流水线</span></a><a class="item title" href="/archives/article-62/"><span class="title">架构设计原则：SOLID 与 KISS</span></a><a class="item title" href="/archives/article-61/"><span class="title">远程工作：挑战与优势</span></a><a class="item title" href="/archives/article-60/"><span class="title">开源项目如何商业化</span></a><a class="item title" href="/archives/article-59/"><span class="title">AI 部署：模型优化与服务化</span></a><a class="item title" href="/archives/article-58/"><span class="title">Kubernetes 入门：从部署到管理</span></a><a class="item title" href="/archives/article-57/"><span class="title">程序员的职业发展</span></a></div></widget>
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/HeiYingQWQ" target="_blank" rel="external nofollow noopener noreferrer"><img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/08a41b181ce68.svg"/></a><a class="social" href="https://heiying.eu/atom.xml" target="_blank" rel="external nofollow noopener noreferrer"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXJzcy1pY29uIGx1Y2lkZS1yc3MiPjxwYXRoIGQ9Ik00IDExYTkgOSAwIDAgMSA5IDkiLz48cGF0aCBkPSJNNCA0YTE2IDE2IDAgMCAxIDE2IDE2Ii8+PGNpcmNsZSBjeD0iNSIgY3k9IjE5IiByPSIxIi8+PC9zdmc+"/></a></div></footer>
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B/">代码编程</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-09-09T11:22:50.000Z">2026-09-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-09-09T11:31:49.265Z">2026-09-09</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>从零实现一个带重试和超时的异步任务队列</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>很多脚本一开始都长这样：拿到一组任务，<code>Promise.all()</code> 一把梭。</p>
+<p>任务少的时候，它简单、直接，还显得很现代。任务一多，问题就一起出现了：瞬间发起几百个请求，失败后没有重试，某个 Promise 永远不结束，程序也不知道什么时候可以安全退出。</p>
+<p>这次不调用现成的队列库，我们用 Node.js 的原生能力写一个小型异步任务队列。它只解决一件事：在内存里可靠地运行有限数量的任务，并为每个任务提供并发限制、超时、重试和优雅关闭。</p>
+<p>先把边界说清楚：这不是生产级消息系统。它没有持久化，进程崩溃后队列里的任务会消失，也没有跨进程消费者。它的价值在于把异步调度最容易被忽略的部分摊开，让每一个决定都能看到。</p>
+<h2 id="先定义我们要的行为"><a href="#先定义我们要的行为" class="headerlink" title="先定义我们要的行为"></a>先定义我们要的行为</h2><p>一个任务进入队列后，应该经历这样的状态：等待执行、运行中、成功，或者失败后等待下一次尝试。队列本身还要遵守几条规则：</p>
+<ul>
+<li>同时运行的任务数不能超过 <code>concurrency</code>；</li>
+<li>一次执行超过 <code>timeoutMs</code>，就通过 <code>AbortSignal</code> 通知任务停止；</li>
+<li>失败后最多重试 <code>retries</code> 次，每次等待时间逐步增加；</li>
+<li>调用 <code>close()</code> 后不再接收新任务，但已经进入队列的任务可以排空；</li>
+<li>每次 <code>add()</code> 返回一个 Promise，让调用方拿到任务最终结果。</li>
+</ul>
+<p>这里有一个容易被忽略的词：<strong>通知</strong>。</p>
+<p>JavaScript 的 Promise 没有“强制杀死”接口。<code>Promise.race()</code> 能让队列先得到超时结果，却不能抹掉已经开始执行的函数。要让超时真正有用，任务函数必须接收 <code>AbortSignal</code>，并在等待网络、文件或其他可取消操作时配合它。</p>
+<h2 id="第一版：只限制并发"><a href="#第一版：只限制并发" class="headerlink" title="第一版：只限制并发"></a>第一版：只限制并发</h2><p>队列的核心其实不复杂：数组保存等待中的任务，<code>running</code> 记录正在执行的数量，<code>pump()</code> 在有空位时不断取任务。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">pump</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">while</span> (running &lt; concurrency &amp;&amp; pending.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> item = pending.<span class="title function_">shift</span>();</span><br><span class="line">    running += <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">run</span>(item).<span class="title function_">finally</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      running -= <span class="number">1</span>;</span><br><span class="line">      <span class="title function_">pump</span>();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关键点是 <code>finally()</code>。无论任务成功还是失败，都必须把占用的并发槽释放掉。如果只在成功分支里减一，队列遇到第一个异常就会慢慢“锁死”。</p>
+<h2 id="完整实现：queue-mjs"><a href="#完整实现：queue-mjs" class="headerlink" title="完整实现：queue.mjs"></a>完整实现：queue.mjs</h2><p>下面这个实现只依赖 Node.js 内置模块。<code>timers/promises</code> 用来等待退避时间，<code>AbortController</code> 负责把超时信号传给任务。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; randomUUID &#125; <span class="keyword">from</span> <span class="string">&#x27;node:crypto&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="built_in">setTimeout</span> <span class="keyword">as</span> delay &#125; <span class="keyword">from</span> <span class="string">&#x27;node:timers/promises&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">TimeoutError</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Error</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">timeoutMs</span>) &#123;</span><br><span class="line">    <span class="variable language_">super</span>(<span class="string">`task timed out after <span class="subst">$&#123;timeoutMs&#125;</span>ms`</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = <span class="string">&#x27;TimeoutError&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">code</span> = <span class="string">&#x27;ETIMEDOUT&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">timeoutMs</span> = timeoutMs;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">QueueClosedError</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Error</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">super</span>(<span class="string">&#x27;queue is closed&#x27;</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = <span class="string">&#x27;QueueClosedError&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">code</span> = <span class="string">&#x27;EQUEUECLOSED&#x27;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">AsyncTaskQueue</span> &#123;</span><br><span class="line">  #pending = [];</span><br><span class="line">  #running = <span class="number">0</span>;</span><br><span class="line">  #accepting = <span class="literal">true</span>;</span><br><span class="line">  #idleWaiters = [];</span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">&#123;</span></span><br><span class="line"><span class="params">    concurrency = <span class="number">2</span>,</span></span><br><span class="line"><span class="params">    timeoutMs = <span class="number">5_000</span>,</span></span><br><span class="line"><span class="params">    retries = <span class="number">2</span>,</span></span><br><span class="line"><span class="params">    backoffMs = <span class="number">200</span>,</span></span><br><span class="line"><span class="params">  &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="title class_">Number</span>.<span class="title function_">isInteger</span>(concurrency) || concurrency &lt; <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RangeError</span>(<span class="string">&#x27;concurrency must be a positive integer&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="title class_">Number</span>.<span class="built_in">isFinite</span>(timeoutMs) || timeoutMs &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RangeError</span>(<span class="string">&#x27;timeoutMs must be greater than zero&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="title class_">Number</span>.<span class="title function_">isInteger</span>(retries) || retries &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RangeError</span>(<span class="string">&#x27;retries must be a non-negative integer&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="title class_">Number</span>.<span class="built_in">isFinite</span>(backoffMs) || backoffMs &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RangeError</span>(<span class="string">&#x27;backoffMs must be non-negative&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">concurrency</span> = concurrency;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">timeoutMs</span> = timeoutMs;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">retries</span> = retries;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">backoffMs</span> = backoffMs;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">add</span>(<span class="params">task, &#123; id = randomUUID() &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> task !== <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(<span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="string">&#x27;task must be a function&#x27;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.#accepting) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(<span class="keyword">new</span> <span class="title class_">QueueClosedError</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.#pending.<span class="title function_">push</span>(&#123; id, task, resolve, reject &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.#<span class="title function_">pump</span>();</span><br><span class="line">    <span class="keyword">return</span> promise;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">close</span>(<span class="params">&#123; drain = <span class="literal">true</span> &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.#accepting = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!drain) &#123;</span><br><span class="line">      <span class="keyword">const</span> error = <span class="keyword">new</span> <span class="title class_">QueueClosedError</span>();</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> <span class="variable language_">this</span>.#pending.<span class="title function_">splice</span>(<span class="number">0</span>)) &#123;</span><br><span class="line">        item.<span class="title function_">reject</span>(error);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.#<span class="title function_">notifyIdle</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">onIdle</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.#running === <span class="number">0</span> &amp;&amp; <span class="variable language_">this</span>.#pending.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="variable language_">this</span>.#idleWaiters.<span class="title function_">push</span>(resolve));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  #<span class="title function_">pump</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="variable language_">this</span>.#running &lt; <span class="variable language_">this</span>.<span class="property">concurrency</span> &amp;&amp; <span class="variable language_">this</span>.#pending.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> item = <span class="variable language_">this</span>.#pending.<span class="title function_">shift</span>();</span><br><span class="line">      <span class="variable language_">this</span>.#running += <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">      <span class="variable language_">this</span>.#<span class="title function_">run</span>(item).<span class="title function_">finally</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.#running -= <span class="number">1</span>;</span><br><span class="line">        <span class="variable language_">this</span>.#<span class="title function_">pump</span>();</span><br><span class="line">        <span class="variable language_">this</span>.#<span class="title function_">notifyIdle</span>();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> #<span class="title function_">run</span>(<span class="params">item</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> maxAttempts = <span class="variable language_">this</span>.<span class="property">retries</span> + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> attempt = <span class="number">1</span>; attempt &lt;= maxAttempts; attempt += <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="variable language_">this</span>.#<span class="title function_">withTimeout</span>(</span><br><span class="line">          <span class="function">() =&gt;</span> item.<span class="title function_">task</span>(&#123;</span><br><span class="line">            <span class="attr">id</span>: item.<span class="property">id</span>,</span><br><span class="line">            attempt,</span><br><span class="line">            <span class="attr">signal</span>: controller.<span class="property">signal</span>,</span><br><span class="line">          &#125;),</span><br><span class="line">          controller,</span><br><span class="line">        );</span><br><span class="line">        item.<span class="title function_">resolve</span>(result);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="keyword">if</span> (attempt === maxAttempts) &#123;</span><br><span class="line">          item.<span class="title function_">reject</span>(error);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> waitMs = <span class="variable language_">this</span>.<span class="property">backoffMs</span> * <span class="number">2</span> ** (attempt - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">await</span> <span class="title function_">delay</span>(waitMs);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  #<span class="title function_">withTimeout</span>(<span class="params">task, controller</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> timer;</span><br><span class="line">    <span class="keyword">const</span> timeout = <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">_, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> error = <span class="keyword">new</span> <span class="title class_">TimeoutError</span>(<span class="variable language_">this</span>.<span class="property">timeoutMs</span>);</span><br><span class="line">        controller.<span class="title function_">abort</span>(error);</span><br><span class="line">        <span class="title function_">reject</span>(error);</span><br><span class="line">      &#125;, <span class="variable language_">this</span>.<span class="property">timeoutMs</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> work = <span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(task);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">race</span>([work, timeout]).<span class="title function_">finally</span>(<span class="function">() =&gt;</span> <span class="built_in">clearTimeout</span>(timer));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  #<span class="title function_">notifyIdle</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.#running !== <span class="number">0</span> || <span class="variable language_">this</span>.#pending.<span class="property">length</span> !== <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> resolve <span class="keyword">of</span> <span class="variable language_">this</span>.#idleWaiters.<span class="title function_">splice</span>(<span class="number">0</span>)) <span class="title function_">resolve</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段实现里有几个值得停下来看的地方。</p>
+<p><code>retries</code> 表示失败后额外尝试几次，所以 <code>retries: 2</code> 最多执行三次。退避时间使用 <code>backoffMs * 2 ** (attempt - 1)</code>，第一次失败等 200 毫秒，第二次失败等 400 毫秒。真实服务通常还会加一点随机抖动，避免一批任务在同一时刻再次撞向服务；这里先保持实现容易读懂。</p>
+<p><code>close({ drain: true })</code> 只关闭入口，不会砍掉已经排队的工作。如果传入 <code>drain: false</code>，等待中的任务会收到 <code>QueueClosedError</code>，已经运行的任务仍然需要自己响应信号或自然结束。队列没有替你做进程级别的强杀。</p>
+<p><code>onIdle()</code> 是一个很小但很重要的接口。直接调用 <code>close()</code> 后立刻让 Node 进程退出，可能会把还没完成的任务截断。等待 <code>onIdle()</code>，调用方才知道队列真的排空了。</p>
+<h2 id="写一个会失败两次的任务"><a href="#写一个会失败两次的任务" class="headerlink" title="写一个会失败两次的任务"></a>写一个会失败两次的任务</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="built_in">setTimeout</span> <span class="keyword">as</span> delay &#125; <span class="keyword">from</span> <span class="string">&#x27;node:timers/promises&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">AsyncTaskQueue</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;./queue.mjs&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> queue = <span class="keyword">new</span> <span class="title class_">AsyncTaskQueue</span>(&#123;</span><br><span class="line">  <span class="attr">concurrency</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">timeoutMs</span>: <span class="number">1_000</span>,</span><br><span class="line">  <span class="attr">retries</span>: <span class="number">3</span>,</span><br><span class="line">  <span class="attr">backoffMs</span>: <span class="number">100</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> calls = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> result = <span class="keyword">await</span> queue.<span class="title function_">add</span>(<span class="title function_">async</span> (&#123; attempt, signal &#125;) =&gt; &#123;</span><br><span class="line">  calls += <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">delay</span>(<span class="number">50</span>, <span class="literal">undefined</span>, &#123; signal &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (attempt &lt; <span class="number">3</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`temporary failure on attempt <span class="subst">$&#123;attempt&#125;</span>`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;done&#x27;</span>;</span><br><span class="line">&#125;, &#123; <span class="attr">id</span>: <span class="string">&#x27;demo-task&#x27;</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result, calls); <span class="comment">// done 3</span></span><br><span class="line"></span><br><span class="line">queue.<span class="title function_">close</span>();</span><br><span class="line"><span class="keyword">await</span> queue.<span class="title function_">onIdle</span>();</span><br></pre></td></tr></table></figure>
+
+<p>这次任务前两次抛错，第三次成功。队列只把错误当作“还可以再试”的信号，并不知道这个错误是否值得重试。网络临时断开、限流、上游 503 可能适合重试；参数校验失败、权限不足和重复扣款通常不适合。</p>
+<p>因此，生产代码不应该对所有异常无脑重试。可以在 <code>catch</code> 里增加一个 <code>shouldRetry(error)</code>，只对明确的临时错误重试，并给任务设置幂等键。重试本身不是可靠性，它只是把一次失败换成了几次机会。</p>
+<h2 id="超时并不等于停止执行"><a href="#超时并不等于停止执行" class="headerlink" title="超时并不等于停止执行"></a>超时并不等于停止执行</h2><p>这是本文最容易被误用的一点。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> queue.<span class="title function_">add</span>(<span class="title function_">async</span> (&#123; signal &#125;) =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">delay</span>(<span class="number">10_000</span>, <span class="literal">undefined</span>, &#123; signal &#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;too late&#x27;</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>超过 <code>timeoutMs</code> 后，队列会把任务标记为超时，并调用 <code>controller.abort()</code>。因为 <code>timers/promises.setTimeout()</code> 接收了这个信号，等待会被取消，任务也就能尽快结束。</p>
+<p>如果任务内部是这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(resolve, <span class="number">10_000</span>));</span><br></pre></td></tr></table></figure>
+
+<p>它不会理会 <code>signal</code>。队列可以先返回超时，但那段定时器仍然会继续跑。对网络请求，要把 signal 传给 <code>fetch</code>；对文件或数据库库，要确认它们是否支持取消；对无法取消的 CPU 密集任务，则应该考虑 <code>Worker</code> 或子进程，把任务放到可以真正终止的边界里。</p>
+<h2 id="用内置测试验证四件事"><a href="#用内置测试验证四件事" class="headerlink" title="用内置测试验证四件事"></a>用内置测试验证四件事</h2><p>没有测试的并发代码，很容易只在“任务刚好成功”的时候显得正确。Node.js 自带 <code>node:test</code>，可以直接检查队列最重要的行为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> assert <span class="keyword">from</span> <span class="string">&#x27;node:assert/strict&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> test <span class="keyword">from</span> <span class="string">&#x27;node:test&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="built_in">setTimeout</span> <span class="keyword">as</span> delay &#125; <span class="keyword">from</span> <span class="string">&#x27;node:timers/promises&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  <span class="title class_">AsyncTaskQueue</span>,</span><br><span class="line">  <span class="title class_">QueueClosedError</span>,</span><br><span class="line">  <span class="title class_">TimeoutError</span>,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&#x27;./queue.mjs&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;retries a temporary failure and eventually resolves&#x27;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> queue = <span class="keyword">new</span> <span class="title class_">AsyncTaskQueue</span>(&#123; <span class="attr">retries</span>: <span class="number">2</span>, <span class="attr">backoffMs</span>: <span class="number">1</span> &#125;);</span><br><span class="line">  <span class="keyword">let</span> attempts = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> result = <span class="keyword">await</span> queue.<span class="title function_">add</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    attempts += <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (attempts &lt; <span class="number">3</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;temporary&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;ok&#x27;</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  assert.<span class="title function_">equal</span>(result, <span class="string">&#x27;ok&#x27;</span>);</span><br><span class="line">  assert.<span class="title function_">equal</span>(attempts, <span class="number">3</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;times out a task and aborts cooperative work&#x27;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> queue = <span class="keyword">new</span> <span class="title class_">AsyncTaskQueue</span>(&#123; <span class="attr">timeoutMs</span>: <span class="number">10</span>, <span class="attr">retries</span>: <span class="number">0</span> &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> assert.<span class="title function_">rejects</span>(</span><br><span class="line">    queue.<span class="title function_">add</span>(<span class="function">(<span class="params">&#123; signal &#125;</span>) =&gt;</span> <span class="title function_">delay</span>(<span class="number">100</span>, <span class="literal">undefined</span>, &#123; signal &#125;)),</span><br><span class="line">    <span class="function">(<span class="params">error</span>) =&gt;</span> error <span class="keyword">instanceof</span> <span class="title class_">TimeoutError</span>,</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;never exceeds the concurrency limit&#x27;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> queue = <span class="keyword">new</span> <span class="title class_">AsyncTaskQueue</span>(&#123; <span class="attr">concurrency</span>: <span class="number">2</span> &#125;);</span><br><span class="line">  <span class="keyword">let</span> active = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> peak = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>(<span class="title class_">Array</span>.<span class="title function_">from</span>(&#123; <span class="attr">length</span>: <span class="number">6</span> &#125;, <span class="function">(<span class="params">_, index</span>) =&gt;</span> queue.<span class="title function_">add</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    active += <span class="number">1</span>;</span><br><span class="line">    peak = <span class="title class_">Math</span>.<span class="title function_">max</span>(peak, active);</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">delay</span>(<span class="number">5</span>);</span><br><span class="line">    active -= <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> index;</span><br><span class="line">  &#125;)));</span><br><span class="line"></span><br><span class="line">  assert.<span class="title function_">equal</span>(peak, <span class="number">2</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;rejects new work after close&#x27;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> queue = <span class="keyword">new</span> <span class="title class_">AsyncTaskQueue</span>();</span><br><span class="line">  queue.<span class="title function_">close</span>();</span><br><span class="line">  <span class="keyword">await</span> assert.<span class="title function_">rejects</span>(queue.<span class="title function_">add</span>(<span class="function">() =&gt;</span> <span class="string">&#x27;never&#x27;</span>), <span class="title class_">QueueClosedError</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node --<span class="built_in">test</span> queue.test.mjs</span><br></pre></td></tr></table></figure>
+
+<p>这四个测试分别守住重试、超时、并发上限和生命周期边界。还可以继续补充：<code>drain: false</code> 是否拒绝等待中的任务、任务最终失败时是否保留原始错误、退避时间是否带随机抖动，以及队列关闭时正在重试的任务应该怎样处理。</p>
+<h2 id="这只是一只内存队列"><a href="#这只是一只内存队列" class="headerlink" title="这只是一只内存队列"></a>这只是一只内存队列</h2><p>把代码跑通以后，不要急着把它放进支付、发货或消息消费系统。这个实现故意没有解决几个更大的问题：</p>
+<ul>
+<li>进程崩溃后，内存里的任务和结果都会丢失；</li>
+<li>多个进程各自维护自己的队列，无法共享并发上限；</li>
+<li>任务执行到一半崩溃，重启后可能重复执行；</li>
+<li>重试没有持久化记录，也没有死信队列；</li>
+<li><code>close()</code> 不能替你保证外部副作用已经回滚。</li>
+</ul>
+<p>如果需要这些能力，下一步不是继续往这个类里堆字段，而是引入持久化存储、唯一任务 ID、幂等处理和可观测日志。Redis、数据库或专门的消息队列可以解决一部分问题，但它们也会带来确认、重复投递和一致性的新问题。</p>
+<p>从零实现这个小队列的意义，不是替代那些成熟工具，而是先把“并发限制”“超时通知”“失败重试”和“任务完成”这几个词分别弄明白。异步代码真正难的地方，往往不是把函数写成 <code>async</code>，而是知道它失败以后，系统还会不会保持清醒。</p>
+<p>相关文档：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/api/timers.html">Node.js Timers</a></li>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/api/test.html">Node.js Test Runner</a></li>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/api/events.html">Node.js Events</a></li>
+</ul>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/archives/article-65/">1.9TB U 盘的惊喜，只维持了三分钟</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body artalk'>
+      
+
+<div class="artalk with-fancybox" id="artalk_container"><svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg></div>
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="sitemap" style="column-count:3;"><div class="sitemap-group"><span class="fs15">统计</span><a href="/"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><p><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></p></a></div><div class="sitemap-group"><span class="fs15">声明</span><a href="/"><a href="/about/" target="_blank">关于本站</a></a><a href="/"><a href="" target="_blank">隐私声明</a></a><a href="/"><a href="" target="_blank">免责声明</a></a></div><div class="sitemap-group"><span class="fs15">备案</span><a href="/"><a href="https://icp.gov.moe/?keyword=20260330" target="_blank"><img src="/assets/svg/meng.svg" width="135" height="20"></a></a><a href="/"><a href="#" target="_blank"><img src="/assets/svg/Copyright.svg" width="135" height="20"></a></a></div></div><div class="text"><p>本站由 <a href="/">小白 🐾</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E5%AE%9A%E4%B9%89%E6%88%91%E4%BB%AC%E8%A6%81%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="toc-text">先定义我们要的行为</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%89%88%EF%BC%9A%E5%8F%AA%E9%99%90%E5%88%B6%E5%B9%B6%E5%8F%91"><span class="toc-text">第一版：只限制并发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E5%AE%9E%E7%8E%B0%EF%BC%9Aqueue-mjs"><span class="toc-text">完整实现：queue.mjs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E4%B8%80%E4%B8%AA%E4%BC%9A%E5%A4%B1%E8%B4%A5%E4%B8%A4%E6%AC%A1%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="toc-text">写一个会失败两次的任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E5%B9%B6%E4%B8%8D%E7%AD%89%E4%BA%8E%E5%81%9C%E6%AD%A2%E6%89%A7%E8%A1%8C"><span class="toc-text">超时并不等于停止执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E5%86%85%E7%BD%AE%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81%E5%9B%9B%E4%BB%B6%E4%BA%8B"><span class="toc-text">用内置测试验证四件事</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E5%8F%AA%E6%98%AF%E4%B8%80%E5%8F%AA%E5%86%85%E5%AD%98%E9%98%9F%E5%88%97"><span class="toc-text">这只是一只内存队列</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 10.5h8M8 14h5.5M17 3.338A9.95 9.95 0 0 0 12 2C6.477 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10c0-1.821-.487-3.53-1.338-5"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+  <script type="module">
+  const el = document.getElementById('artalk_container');
+  util.viewportLazyload(el, load_artalk, false);
+
+  function load_artalk() {
+    if (!el) return;
+    utils.css('https://artalk.heiying.eu/dist/Artalk.css');
+    utils.js('https://artalk.heiying.eu/dist/Artalk.js', {defer: true}).then(function () {
+      // 监听 Artalk 事件
+      // FIXME: Artalk开启了懒加载会导致评论输入预览框里的图也变成data-src，导致看不到图
+      // Artalk.use((ctx) => {
+      //   ctx.on('list-loaded', () => window.lazyLoadInstance?.update())
+      // })
+      const path = el.getAttribute('comment_id') ?? decodeURI(window.location.pathname);
+      const artalk = Artalk.init({
+        el: '#artalk_container',
+        pageKey: path,
+        pageTitle: '从零实现一个带重试和超时的异步任务队列',
+        server: 'https://artalk.heiying.eu/',
+        site: '爪印博客',
+        darkMode: 'auto',
+        
+      });
+    });
+  }
+</script>
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PL6R5M22HZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PL6R5M22HZ');
+  // 爪印博客自定义 JavaScript
+  console.log('爪印博客自定义 JavaScript 已加载');
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('页面加载完成');
+  });
+</script>
+
+
+
+<!-- inject -->
+
+</div></body></html>
