@@ -1,0 +1,5 @@
+random_image:
+  layout: markdown
+  title: 随机图片
+  content: |
+    <img src="https://birdteam.net/meinv.php">

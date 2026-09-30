@@ -1,3 +1,11 @@
+site_tree:
+  home:
+    rightbar: random_image, recent_comments
+
+inject:
+  head:
+    - '<link rel="stylesheet" href="/css/zhuayin-pages.css">'
+
 menubar:
   columns: 4 # 一行多少个
   items: # 可按照自己需求增加，符合以下格式即可
@@ -11,6 +19,11 @@ menubar:
       title: 关于
       icon: ''
       url: /about/
+    - id: 3
+      theme: ''
+      title: 友链
+      icon: ''
+      url: /friends/
 
 
 ######## Footer ########
@@ -23,6 +36,45 @@ footer:
       icon: '<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXJzcy1pY29uIGx1Y2lkZS1yc3MiPjxwYXRoIGQ9Ik00IDExYTkgOSAwIDAgMSA5IDkiLz48cGF0aCBkPSJNNCA0YTE2IDE2IDAgMCAxIDE2IDE2Ii8+PGNpcmNsZSBjeD0iNSIgY3k9IjE5IiByPSIxIi8+PC9zdmc+"/>'
       url: https://heiying.eu/atom.xml
   sitemap:
-    - title: 备案
-      items:
-        - '<a href="https://icp.gov.moe/?keyword=20260330" target="_blank"><img src="/assets/svg/meng.svg" width="135" height="20"></a>'
+  - title: 统计
+    items:
+      - '<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><p><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></p>'
+  - title: 声明
+    items:
+      - '<a href="/about/" target="_blank">关于本站</a>'
+      - '<a href="" target="_blank">隐私声明</a>'
+      - '<a href="" target="_blank">免责声明</a>'
+  - title: 备案
+    items:
+      - '<a href="https://icp.gov.moe/?keyword=20260330" target="_blank"><img src="/assets/svg/meng.svg" width="135" height="20"></a>'
+      - '<a href="#" target="_blank"><img src="/assets/svg/Copyright.svg" width="135" height="20"></a>'
+        
+comments:
+  service: artalk
+  artalk:
+    css: https://artalk.heiying.eu/dist/Artalk.css
+    js: https://artalk.heiying.eu/dist/Artalk.js 
+    server: https://artalk.heiying.eu/
+    site: '爪印博客' 
+    placeholder: '来说点什么吧~'
+    darkMode: auto
+
+plugins:
+  # 自定义 JavaScript
+  custom_js:
+    enable: true
+    inject: |
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PL6R5M22HZ"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-PL6R5M22HZ');
+        // 爪印博客自定义 JavaScript
+        console.log('爪印博客自定义 JavaScript 已加载');
+        document.addEventListener('DOMContentLoaded', function() {
+          console.log('页面加载完成');
+        });
+      </script>
+    
